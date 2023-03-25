@@ -23,7 +23,7 @@ public class Product {
         this.prod_item_unit = (String) stuff.get("prod_item_unit");
         this.prod_item_quantity = Double.valueOf(stuff.get("prod_item_quantity").toString());
         this.prod_item_cost = Double.valueOf(stuff.get("prod_item_cost").toString());
-        //this.prod_item_delivered = (LocalDateTime) stuff.get("prod_item_delivered");
-        //this.prod_item_valid_until = (LocalDateTime) stuff.get("prod_item_valid_until");
+        this.prod_item_delivered = LocalDateTime.parse((String) stuff.get("prod_item_delivered"));
+        this.prod_item_valid_until = LocalDateTime.parse((String) stuff.get("prod_item_valid_until"));
     }
 }

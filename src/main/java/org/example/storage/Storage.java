@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 
@@ -16,7 +17,7 @@ import org.w3c.dom.ls.LSOutput;
 
 
 public class Storage {
-    public HashMap<Long, Product> storage;
+    public Map<Long, Product> storage;
 
     public Storage() throws IOException, ParseException {
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/products.txt");

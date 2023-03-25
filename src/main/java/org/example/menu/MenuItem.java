@@ -1,20 +1,26 @@
 package org.example.menu;
 
-import java.io.Serializable;
+import org.example.storage.Product;
+import org.example.storage.Storage;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.*;
+import java.util.HashMap;
 
 public class MenuItem implements Serializable {
-    int id;
-    int recipe_id;
-    boolean isAvailable;
+    Long menu_dish_id;
+    Long menu_dish_card;
+    Long menu_dish_price;
+    Boolean menu_dish_active;
 
-    public MenuItem(int id, int recipe_id, boolean isAvailable) {
-        this.id = id;
-        this.recipe_id = recipe_id;
-        this.isAvailable = isAvailable;
+    public MenuItem(JSONObject stuff) throws IOException, ParseException {
+        this.menu_dish_id = (Long) stuff.get("menu_dish_id");
+        this.menu_dish_card = (Long) stuff.get("menu_dish_card");
+        this.menu_dish_price = (Long) stuff.get("menu_dish_price");
+        this.menu_dish_active = (Boolean) stuff.get("menu_dish_active");
     }
 
-    @Override
-    public String toString() {
-        return "MenuItem" + id + ": recipeId: " + recipe_id;
-    }
 }
