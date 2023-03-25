@@ -9,7 +9,10 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+import jade.wrapper.StaleProxyException;
+import org.example.AgentGenerator;
 import org.example.menu.MenuAgent;
+import org.example.order.OrderAgent;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -45,6 +48,8 @@ public class ManagerAgent extends Agent {
             throw new RuntimeException(e);
         }
         menuAgent = result[0].getName();
+
+
     }
 
     protected void setup() {
@@ -83,7 +88,8 @@ public class ManagerAgent extends Agent {
                                 aclMessage.setContentObject(message);
                                 myAgent.send(aclMessage);
                             } else if (json.get(REQUEST).equals("order")) {
-
+                                int orderNumber = OrderAgent.getOrderNumbers();
+                                AgentGenerator.addAgent("Order " + orderNumber, OrderAgent.class.getName(), new Object[]{msg.getSender(), json.get("order"), orderNumber});
                             }
                         } else if (msg.getPerformative() == ACLMessage.CONFIRM) {
                             System.out.println("Got answer from menu");
@@ -96,6 +102,8 @@ public class ManagerAgent extends Agent {
                         System.out.println(e);
                         throw new RuntimeException(e);
                     } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (StaleProxyException e) {
                         throw new RuntimeException(e);
                     }
                 }

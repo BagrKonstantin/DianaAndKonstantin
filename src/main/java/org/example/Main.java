@@ -26,12 +26,7 @@ public class Main {
 //        Controller controller = new Controller();
          // Storage a = new Storage();
 
-        final Runtime rt = Runtime.instance();
-        final Profile p = new ProfileImpl();
 
-        p.setParameter(Profile.MAIN_HOST, "localhost");
-        p.setParameter(Profile.MAIN_PORT, "8080");
-        p.setParameter(Profile.GUI, "true");
 
         //JSONObject cookieJO = new JSONObject();
 
@@ -63,23 +58,28 @@ public class Main {
 
 
 
-        ContainerController containerController = rt.createMainContainer(p);
 
 
-        containerController.createNewAgent(
-                "Menu",
-                MenuAgent.class.getName(),
-                new String[]{}).start();
+//        containerController.createNewAgent(
+//                "Menu",
+//                MenuAgent.class.getName(),
+//                new String[]{}).start();
+//
+//        containerController.createNewAgent(
+//                "Michael Scott",
+//                ManagerAgent.class.getName(),
+//                new String[]{}).start();
+//
+//        containerController.createNewAgent(
+//                "Cumstomer",
+//                CustomerAgent.class.getName(),
+//                new String[]{}).start();
 
-        containerController.createNewAgent(
-                "Michael Scott",
-                ManagerAgent.class.getName(),
-                new String[]{}).start();
-
-        containerController.createNewAgent(
-                "Cumstomer",
-                CustomerAgent.class.getName(),
-                new String[]{}).start();
+        AgentGenerator agentGenerator = new AgentGenerator();
+        AgentGenerator.addAgent("Menu", MenuAgent.class.getName());
+        AgentGenerator.addAgent("Michael Scott", ManagerAgent.class.getName());
+        AgentGenerator.addAgent("Cumstomer", CustomerAgent.class.getName());
+        AgentGenerator.addAgent("Cumstomer2", CustomerAgent.class.getName());
     }
 
 
