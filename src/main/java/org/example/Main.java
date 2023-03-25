@@ -10,6 +10,7 @@ import jade.core.Runtime;
 import org.example.customer.CustomerAgent;
 import org.example.manager.ManagerAgent;
 import org.example.menu.MenuAgent;
+import org.example.storage.Storage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -21,7 +22,9 @@ public class Main {
 
     public static void main(String[] args) throws ControllerException, IOException, ParseException {
         System.out.println("Hello world!");
+
 //        Controller controller = new Controller();
+         // Storage a = new Storage();
 
         final Runtime rt = Runtime.instance();
         final Profile p = new ProfileImpl();
