@@ -1,4 +1,4 @@
-package storage;
+package org.example.storage;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
