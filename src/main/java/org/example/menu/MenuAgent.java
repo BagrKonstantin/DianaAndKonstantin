@@ -1,4 +1,9 @@
 package org.example.menu;
 
-public class MenuAgent {
+import jade.core.Agent;
+
+public class MenuAgent extends Agent {
+    protected void setup() {}
+
+
 }

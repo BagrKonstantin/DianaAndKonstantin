@@ -21,11 +21,6 @@ import java.util.HashSet;
 
 public class CustomerAgent extends Agent {
     Menu menu;
-    String name;
-    public CustomerAgent(String name) {
-        this.name = name;
-        menu = new Menu();
-    }
 
     public boolean done() {
         return true;
@@ -35,7 +30,7 @@ public class CustomerAgent extends Agent {
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setType("customer");
-        sd.setName(name);
+        sd.setName(this.getLocalName());
         dfd.addServices(sd);
         try {
             DFService.register(this, dfd);
@@ -45,33 +40,44 @@ public class CustomerAgent extends Agent {
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         // addBehaviour(new MakeOrder());
 
+//        addBehaviour(new OneShotBehaviour() {
+//            @Override
+//            public void action() {
+//                ACLMessage msg = myAgent.receive();
+//                if (msg != null) {
+//                    String cell_id = msg.getContent();
+//                    ACLMessage reply = msg.createReply();
+//                    try {
+//                        reply.setContent("Collected order at cell: " + cell_id);
+//                        myAgent.send(reply);
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//                //myAgent.doDelete();
+//            }
+//        });
         addBehaviour(new OneShotBehaviour() {
             @Override
             public void action() {
-                ACLMessage msg = myAgent.receive();
-                if (msg != null) {
-                    String cell_id = msg.getContent();
-                    ACLMessage reply = msg.createReply();
-                    try {
-                        reply.setContent("Collected order at cell: " + cell_id);
-                        myAgent.send(reply);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                myAgent.doDelete();
-            }
-        });
-        addBehaviour(new OneShotBehaviour() {
-            @Override
-            public void action() {
-                HashSet<MenuItem> items = menu.getMenu();
-                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-                msg.addReceiver(new AID("manager", AID.ISLOCALNAME));
+                //HashSet<MenuItem> items = menu.getMenu();
+                DFAgentDescription template = new DFAgentDescription();
+                ServiceDescription sd = new ServiceDescription();
+                sd.setType("manager");
+                template.addServices(sd);
+                DFAgentDescription[] result;
                 try {
-                    Message message = new Message(myAgent.getLocalName(), items.toString(), sd.getType());
+                     result = DFService.search(myAgent, template);
+                } catch (FIPAException e) {
+                    throw new RuntimeException(e);
+                }
+                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                msg.addReceiver(result[0].getName());
+                try {
+                    Message message = new Message(myAgent.getLocalName(), "Хачу меню", myAgent.getName());
                     msg.setContentObject(message);
                     myAgent.send(msg);
+                    System.out.println("Cumstomer asked for menu");
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

@@ -6,6 +6,7 @@ import jade.core.ProfileImpl;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import jade.core.Runtime;
+import org.example.customer.CustomerAgent;
 import org.example.manager.ManagerAgent;
 import org.json.simple.parser.ParseException;
 
@@ -59,6 +60,11 @@ public class Main {
                 "Michael Scott",
                 ManagerAgent.class.getName(),
                 new String[]{"Тест"}).start();
+
+        containerController.createNewAgent(
+                "Cumstomer",
+                CustomerAgent.class.getName(),
+                new String[]{""}).start();
     }
 
 

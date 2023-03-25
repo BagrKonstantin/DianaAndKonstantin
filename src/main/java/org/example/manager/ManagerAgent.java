@@ -42,8 +42,10 @@ public class ManagerAgent extends Agent {
                 if (msg != null) {
                     try {
                         Message message = (Message) msg.getContentObject();
+                        System.out.println(message);
                         if (message.type.equals("customer")) {
                             // ask menu
+                            System.out.println("Manager recieved: " + message.content);
                             ((ManagerAgent) myAgent).menuRequest.add(message.senderIid);
                         } else if (message.type.equals("menu")) {
                             //Message menuMessage = new Message(myAgent.getLocalName(), "this is json menu", myAgent.getName());
