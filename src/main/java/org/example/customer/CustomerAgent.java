@@ -1,5 +1,6 @@
 package org.example.customer;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
@@ -8,15 +9,26 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import org.example.manager.ManagerAgent;
+import org.example.menu.Menu;
+import org.example.menu.MenuItem;
+import org.example.message.Message;
 import org.example.temporal_agent.Controller;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.util.HashSet;
+
 
 public class CustomerAgent extends Agent {
+    Menu menu;
     String name;
     public CustomerAgent(String name) {
         this.name = name;
+        menu = new Menu();
+    }
+
+    public boolean done() {
+        return true;
     }
     protected void setup() {
         DFAgentDescription dfd = new DFAgentDescription();
@@ -48,6 +60,21 @@ public class CustomerAgent extends Agent {
                     }
                 }
                 myAgent.doDelete();
+            }
+        });
+        addBehaviour(new OneShotBehaviour() {
+            @Override
+            public void action() {
+                HashSet<MenuItem> items = menu.getMenu();
+                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                msg.addReceiver(new AID("manager", AID.ISLOCALNAME));
+                try {
+                    Message message = new Message(myAgent.getLocalName(), items.toString(), sd.getType());
+                    msg.setContentObject(message);
+                    myAgent.send(msg);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
