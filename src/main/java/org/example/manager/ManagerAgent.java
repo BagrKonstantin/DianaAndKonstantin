@@ -3,7 +3,6 @@ package org.example.manager;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -11,31 +10,57 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import org.example.menu.MenuAgent;
-import org.example.message.Message;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class ManagerAgent extends Agent {
 
     private Queue<AID> menuRequest;
 
-    protected void setup() {
+    public static final String AGENT_TYPE = "manager";
+    public static final String REQUEST = "request";
 
+
+    private List<AID> chefAgents;
+    private AID menuAgent;
+
+    public ManagerAgent() {
         menuRequest = new LinkedList<>();
+    }
 
+    public void findMenu() {
+        //menuAgent = this.getArguments()[0];
+        DFAgentDescription template = new DFAgentDescription();
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType(MenuAgent.AGENT_TYPE);
+        template.addServices(sd);
+        DFAgentDescription[] result;
+        try {
+            result = DFService.search(this, template);
+        } catch (FIPAException e) {
+            throw new RuntimeException(e);
+        }
+        menuAgent = result[0].getName();
+    }
+
+    protected void setup() {
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("manager");
-        sd.setName("Manager");
+        sd.setType(AGENT_TYPE);
+        sd.setName("Work with customers");
         dfd.addServices(sd);
         try {
             DFService.register(this, dfd);
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
+
+        findMenu();
 
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         addBehaviour(new Behaviour() {
@@ -44,50 +69,33 @@ public class ManagerAgent extends Agent {
                 ACLMessage msg = myAgent.receive();
                 if (msg != null) {
                     try {
-                        Message message = (Message) msg.getContentObject();
-                        System.out.println(msg.getSender());
-                        if (message.type.equals("customer")) {
-                            DFAgentDescription template = new DFAgentDescription();
-                            ServiceDescription sd = new ServiceDescription();
-                            sd.setType("menu");
-                            template.addServices(sd);
-                            DFAgentDescription[] result;
-                            try {
-                                result = DFService.search(myAgent, template);
-                            } catch (FIPAException e) {
-                                throw new RuntimeException(e);
+                        JSONObject json = (JSONObject) msg.getContentObject();
+                        System.out.println("Manager recieved: " + json);
+                        if (msg.getPerformative() == ACLMessage.REQUEST) {
+                            if (json.get(REQUEST).equals("menu")) {
+
+                                ((ManagerAgent) myAgent).menuRequest.add(msg.getSender());
+
+                                ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
+                                aclMessage.addReceiver(menuAgent);
+                                JSONObject message = new JSONObject();
+                                message.put(REQUEST, "menu");
+                                aclMessage.setContentObject(message);
+                                myAgent.send(aclMessage);
+                            } else if (json.get(REQUEST).equals("order")) {
+
                             }
-
-                            // ask menu
-                            System.out.println("Manager recieved: " + message.content);
-                            ((ManagerAgent) myAgent).menuRequest.add(msg.getSender());
-
+                        } else if (msg.getPerformative() == ACLMessage.CONFIRM) {
+                            System.out.println("Got answer from menu");
                             ACLMessage aclMessage = new ACLMessage();
-
-                            aclMessage.addReceiver(result[0].getName());
-
-                            Message message1 = new Message(myAgent.getLocalName(), "hachu", "manager");
-
-                            aclMessage.setContentObject(message1);
+                            aclMessage.addReceiver(((ManagerAgent) myAgent).menuRequest.poll());
+                            aclMessage.setContentObject(json);
                             myAgent.send(aclMessage);
-                        } else if (message.type.equals("menu")) {
-                            System.out.println("Got answer from menu ффф");
-
-
-                            ACLMessage aclMessage = new ACLMessage();
-                            Message message1 = new Message(myAgent.getLocalName(), "a", "manager");
-                            var sender = ((ManagerAgent) myAgent).menuRequest.poll();
-                            aclMessage.addReceiver(sender);
-                            System.out.println(sender);
-                            aclMessage.setContentObject(message1);
-                            myAgent.send(aclMessage);
-
                         }
                     } catch (UnreadableException e) {
                         System.out.println(e);
                         throw new RuntimeException(e);
                     } catch (IOException e) {
-                        System.out.println(e);
                         throw new RuntimeException(e);
                     }
                 }

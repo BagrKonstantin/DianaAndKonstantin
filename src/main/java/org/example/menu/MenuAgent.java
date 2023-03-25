@@ -8,8 +8,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
-import org.example.manager.ManagerAgent;
-import org.example.message.Message;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -17,6 +16,8 @@ import java.util.HashSet;
 public class MenuAgent extends Agent {
 
     HashSet<MenuItem> menu;
+
+    public static final String AGENT_TYPE = "menu";
 
     protected void setup() {
 
@@ -26,11 +27,13 @@ public class MenuAgent extends Agent {
         menu.add(new MenuItem(2, 1, true));
         menu.add(new MenuItem(3, 3, true));
 
+//        this.getContainerController().getName();
+
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("menu");
-        sd.setName("Menu");
+        sd.setType(AGENT_TYPE);
+        sd.setName("Have all information about dishes");
         dfd.addServices(sd);
         try {
             DFService.register(this, dfd);
@@ -46,18 +49,17 @@ public class MenuAgent extends Agent {
                 ACLMessage msg = myAgent.receive();
                 if (msg != null) {
                     try {
-                        Message message = (Message) msg.getContentObject();
-                        System.out.println(message);
+                        JSONObject json = (JSONObject) msg.getContentObject();
 
 
-                        System.out.println("Menu recieved: " + message.content);
+                        System.out.println("Menu recieved: " + json);
 
-                        ACLMessage aclMessage = new ACLMessage();
-
+                        ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
                         aclMessage.addReceiver(msg.getSender());
-                        Message m = new Message(myAgent.getLocalName(), "here is menu", "menu");
+                        JSONObject message = new JSONObject();
+                        message.put("menu", new HashSet<>());
 
-                        aclMessage.setContentObject(m);
+                        aclMessage.setContentObject(message);
                         myAgent.send(aclMessage);
                     } catch (UnreadableException e) {
                         System.out.println(e);

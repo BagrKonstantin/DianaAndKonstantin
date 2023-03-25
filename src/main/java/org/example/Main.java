@@ -4,11 +4,14 @@ package org.example;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.ContainerController;
+import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import jade.core.Runtime;
 import org.example.customer.CustomerAgent;
 import org.example.manager.ManagerAgent;
 import org.example.menu.MenuAgent;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -16,7 +19,7 @@ import java.io.IOException;
 public class Main {
 
 
-    public static void main(String[] args) throws StaleProxyException, IOException, ParseException {
+    public static void main(String[] args) throws ControllerException, IOException, ParseException {
         System.out.println("Hello world!");
 //        Controller controller = new Controller();
 
@@ -26,6 +29,8 @@ public class Main {
         p.setParameter(Profile.MAIN_HOST, "localhost");
         p.setParameter(Profile.MAIN_PORT, "8080");
         p.setParameter(Profile.GUI, "true");
+
+        //JSONObject cookieJO = new JSONObject();
 
 //        JSONParser parser = new JSONParser();
 //
@@ -57,20 +62,21 @@ public class Main {
 
         ContainerController containerController = rt.createMainContainer(p);
 
+
         containerController.createNewAgent(
                 "Menu",
                 MenuAgent.class.getName(),
-                new String[]{"Тест"}).start();
+                new String[]{}).start();
 
         containerController.createNewAgent(
                 "Michael Scott",
                 ManagerAgent.class.getName(),
-                new String[]{"Тест"}).start();
+                new String[]{}).start();
 
         containerController.createNewAgent(
                 "Cumstomer",
                 CustomerAgent.class.getName(),
-                new String[]{""}).start();
+                new String[]{}).start();
     }
 
 

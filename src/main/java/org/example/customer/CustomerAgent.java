@@ -1,6 +1,5 @@
 package org.example.customer;
 
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -11,27 +10,21 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import org.example.manager.ManagerAgent;
-import org.example.menu.MenuItem;
-import org.example.message.Message;
-import org.example.temporal_agent.Controller;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
-
-import java.util.HashSet;
+import org.json.simple.JSONObject;
 
 
 public class CustomerAgent extends Agent {
 
-    public boolean done() {
-        return true;
-    }
+    public static final String AGENT_TYPE = "customer";
+
+    private boolean receivedMenu = false;
 
     protected void setup() {
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("customer");
-        sd.setName(this.getLocalName());
+        sd.setType(AGENT_TYPE);
+        sd.setName("Customer who came to a restaurant");
         dfd.addServices(sd);
         try {
             DFService.register(this, dfd);
@@ -65,7 +58,7 @@ public class CustomerAgent extends Agent {
                 //HashSet<MenuItem> items = menu.getMenu();
                 DFAgentDescription template = new DFAgentDescription();
                 ServiceDescription sd = new ServiceDescription();
-                sd.setType("manager");
+                sd.setType(ManagerAgent.AGENT_TYPE);
                 template.addServices(sd);
                 DFAgentDescription[] result;
                 try {
@@ -73,10 +66,11 @@ public class CustomerAgent extends Agent {
                 } catch (FIPAException e) {
                     throw new RuntimeException(e);
                 }
-                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                 msg.addReceiver(result[0].getName());
                 try {
-                    Message message = new Message(myAgent.getLocalName(), "Хачу меню", "customer");
+                    JSONObject message = new JSONObject();
+                    message.put("request", "menu");
                     msg.setContentObject(message);
                     myAgent.send(msg);
                     System.out.println("Cumstomer asked for menu");
@@ -95,8 +89,9 @@ public class CustomerAgent extends Agent {
                     System.out.println("GOT");
 
                     try {
-                        Message message = (Message) msg.getContentObject();
+                        JSONObject message = (JSONObject) msg.getContentObject();
                         System.out.println(message);
+                        receivedMenu = true;
 
                     } catch (UnreadableException e) {
                         throw new RuntimeException(e);
@@ -106,10 +101,13 @@ public class CustomerAgent extends Agent {
 
             @Override
             public boolean done() {
-                return true;
+                return receivedMenu;
             }
         });
+
+
     }
+
 
     @Override
     protected void takeDown() {
