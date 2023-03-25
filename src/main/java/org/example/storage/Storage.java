@@ -25,9 +25,10 @@ public class Storage {
 
 
         System.out.println(file.getPath());
-        JSONArray o =(JSONArray) new JSONParser().parse(new FileReader(file.getPath()));
+        JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
+        System.out.println(o);
 
-         for (Object item : o) {
+         for (Object item : (JSONArray) o.get("products")) {
              int id = (int) ((JSONObject) item).get("prod_item_id");
              storage.put(id, new Product((JSONObject)item));
              System.out.println("get");
