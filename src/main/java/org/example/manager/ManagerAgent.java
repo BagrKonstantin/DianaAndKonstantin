@@ -3,6 +3,7 @@ package org.example.manager;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -12,6 +13,7 @@ import jade.lang.acl.UnreadableException;
 import org.example.menu.MenuAgent;
 import org.example.message.Message;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -43,7 +45,7 @@ public class ManagerAgent extends Agent {
                 if (msg != null) {
                     try {
                         Message message = (Message) msg.getContentObject();
-                        System.out.println(message);
+                        System.out.println(msg.getSender());
                         if (message.type.equals("customer")) {
                             DFAgentDescription template = new DFAgentDescription();
                             ServiceDescription sd = new ServiceDescription();
@@ -58,19 +60,34 @@ public class ManagerAgent extends Agent {
 
                             // ask menu
                             System.out.println("Manager recieved: " + message.content);
-                            ((ManagerAgent) myAgent).menuRequest.add(message.senderIid);
-                        } else if (message.type.equals("menu")) {
+                            ((ManagerAgent) myAgent).menuRequest.add(msg.getSender());
 
-                            //Message menuMessage = new Message(myAgent.getLocalName(), "this is json menu", myAgent.getName());
-                            //myAgent.send();
                             ACLMessage aclMessage = new ACLMessage();
 
-                            aclMessage.addReceiver(((ManagerAgent) myAgent).menuRequest.poll());
-                            aclMessage.setContent("menu");
+                            aclMessage.addReceiver(result[0].getName());
+
+                            Message message1 = new Message(myAgent.getLocalName(), "hachu", "manager");
+
+                            aclMessage.setContentObject(message1);
                             myAgent.send(aclMessage);
+                        } else if (message.type.equals("menu")) {
+                            System.out.println("Got answer from menu ффф");
+
+
+                            ACLMessage aclMessage = new ACLMessage();
+                            Message message1 = new Message(myAgent.getLocalName(), "a", "manager");
+                            var sender = ((ManagerAgent) myAgent).menuRequest.poll();
+                            aclMessage.addReceiver(sender);
+                            System.out.println(sender);
+                            aclMessage.setContentObject(message1);
+                            myAgent.send(aclMessage);
+
                         }
-                        System.out.println("Order by " + message.localName + ": " + message.content);
                     } catch (UnreadableException e) {
+                        System.out.println(e);
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        System.out.println(e);
                         throw new RuntimeException(e);
                     }
                 }

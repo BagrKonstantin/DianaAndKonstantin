@@ -6,12 +6,18 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
+import org.example.manager.ManagerAgent;
+import org.example.message.Message;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 public class MenuAgent extends Agent {
 
     HashSet<MenuItem> menu;
+
     protected void setup() {
 
         menu = new HashSet<MenuItem>();
@@ -34,10 +40,33 @@ public class MenuAgent extends Agent {
 
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
 
-        this.addBehaviour(new Behaviour() {
+        addBehaviour(new Behaviour() {
             @Override
             public void action() {
+                ACLMessage msg = myAgent.receive();
+                if (msg != null) {
+                    try {
+                        Message message = (Message) msg.getContentObject();
+                        System.out.println(message);
 
+
+                        System.out.println("Menu recieved: " + message.content);
+
+                        ACLMessage aclMessage = new ACLMessage();
+
+                        aclMessage.addReceiver(msg.getSender());
+                        Message m = new Message(myAgent.getLocalName(), "here is menu", "menu");
+
+                        aclMessage.setContentObject(m);
+                        myAgent.send(aclMessage);
+                    } catch (UnreadableException e) {
+                        System.out.println(e);
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        System.out.println(e);
+                        throw new RuntimeException(e);
+                    }
+                }
             }
 
             @Override
@@ -45,7 +74,6 @@ public class MenuAgent extends Agent {
                 return false;
             }
         });
-
 
 
     }

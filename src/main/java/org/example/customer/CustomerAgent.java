@@ -11,7 +11,6 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import org.example.manager.ManagerAgent;
-import org.example.menu.Menu;
 import org.example.menu.MenuItem;
 import org.example.message.Message;
 import org.example.temporal_agent.Controller;
@@ -22,7 +21,6 @@ import java.util.HashSet;
 
 
 public class CustomerAgent extends Agent {
-    Menu menu;
 
     public boolean done() {
         return true;
@@ -42,27 +40,7 @@ public class CustomerAgent extends Agent {
         }
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         // addBehaviour(new MakeOrder());
-        addBehaviour(new Behaviour() {
-            @Override
-            public void action() {
-                ACLMessage msg = myAgent.receive();
-                if (msg != null) {
-                    try {
-                        Message message = (Message) msg.getContentObject();
-                        System.out.println(message);
-                        done();
 
-                    } catch (UnreadableException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-
-            @Override
-            public boolean done() {
-                return true;
-            }
-        });
 
 //        addBehaviour(new OneShotBehaviour() {
 //            @Override
@@ -98,13 +76,37 @@ public class CustomerAgent extends Agent {
                 ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
                 msg.addReceiver(result[0].getName());
                 try {
-                    Message message = new Message(myAgent.getLocalName(), "Хачу меню", myAgent.getName());
+                    Message message = new Message(myAgent.getLocalName(), "Хачу меню", "customer");
                     msg.setContentObject(message);
                     myAgent.send(msg);
                     System.out.println("Cumstomer asked for menu");
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+            }
+        });
+
+        addBehaviour(new Behaviour() {
+            @Override
+            public void action() {
+                ACLMessage msg = myAgent.receive();
+
+                if (msg != null) {
+                    System.out.println("GOT");
+
+                    try {
+                        Message message = (Message) msg.getContentObject();
+                        System.out.println(message);
+
+                    } catch (UnreadableException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public boolean done() {
+                return true;
             }
         });
     }
