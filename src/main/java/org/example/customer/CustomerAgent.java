@@ -12,6 +12,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import org.example.manager.ManagerAgent;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -157,7 +158,9 @@ public class CustomerAgent extends Agent {
             try {
                 JSONObject message = new JSONObject();
                 message.put("request", "order");
-                message.put("order", new ArrayList<>());
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.add(new JSONObject() {{put("1", "2");}});
+                message.put("order", jsonArray);
                 msg.setContentObject(message);
                 myAgent.send(msg);
                 System.out.println("Cumstomer asked food");

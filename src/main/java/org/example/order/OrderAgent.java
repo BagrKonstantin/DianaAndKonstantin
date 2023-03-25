@@ -4,6 +4,10 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.wrapper.StaleProxyException;
+import org.example.AgentGenerator;
+import org.example.process.ProcessAgent;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -20,8 +24,11 @@ public class OrderAgent extends Agent {
 
     private enum statuses {
         CREATED,
+        IN_PROCESS,
+        FINISHED,
 
     }
+
     statuses status;
 
 
@@ -29,9 +36,18 @@ public class OrderAgent extends Agent {
         System.out.println("Manager created new order " + this.getLocalName() + ", now it's ready to go!");
         Object[] args = getArguments();
         customerAID = (AID) args[0];
-        order = (ArrayList) args[1];
+        order = (JSONArray) args[1];
         orderNumber = (Integer) args[2];
         status = statuses.CREATED;
+
+        for (var item : order) {
+            int processNumber = ProcessAgent.getProcessNumbers();
+            try {
+                AgentGenerator.addAgent("Process " + processNumber, ProcessAgent.class.getName(), new Object[]{item});
+            } catch (StaleProxyException e) {
+                throw new RuntimeException(e);
+            }
+        }
         addBehaviour(new TickerBehaviour(this, 5000) {
             @Override
             public void onTick() {
