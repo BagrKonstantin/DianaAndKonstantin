@@ -1,6 +1,5 @@
 package org.example.customer;
 
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
@@ -8,19 +7,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import org.example.manager.ManagerAgent;
-import org.example.menu.Menu;
-import org.example.menu.MenuItem;
 import org.example.message.Message;
-import org.example.temporal_agent.Controller;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
-
-import java.util.HashSet;
 
 
 public class CustomerAgent extends Agent {
-    Menu menu;
 
     public boolean done() {
         return true;
@@ -67,7 +57,7 @@ public class CustomerAgent extends Agent {
                 template.addServices(sd);
                 DFAgentDescription[] result;
                 try {
-                     result = DFService.search(myAgent, template);
+                    result = DFService.search(myAgent, template);
                 } catch (FIPAException e) {
                     throw new RuntimeException(e);
                 }

@@ -9,6 +9,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+import org.example.menu.MenuAgent;
 import org.example.message.Message;
 
 import java.util.LinkedList;
@@ -44,10 +45,22 @@ public class ManagerAgent extends Agent {
                         Message message = (Message) msg.getContentObject();
                         System.out.println(message);
                         if (message.type.equals("customer")) {
+                            DFAgentDescription template = new DFAgentDescription();
+                            ServiceDescription sd = new ServiceDescription();
+                            sd.setType("menu");
+                            template.addServices(sd);
+                            DFAgentDescription[] result;
+                            try {
+                                result = DFService.search(myAgent, template);
+                            } catch (FIPAException e) {
+                                throw new RuntimeException(e);
+                            }
+
                             // ask menu
                             System.out.println("Manager recieved: " + message.content);
                             ((ManagerAgent) myAgent).menuRequest.add(message.senderIid);
                         } else if (message.type.equals("menu")) {
+
                             //Message menuMessage = new Message(myAgent.getLocalName(), "this is json menu", myAgent.getName());
                             //myAgent.send();
                             ACLMessage aclMessage = new ACLMessage();

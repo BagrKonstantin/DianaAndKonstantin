@@ -8,6 +8,7 @@ import jade.wrapper.StaleProxyException;
 import jade.core.Runtime;
 import org.example.customer.CustomerAgent;
 import org.example.manager.ManagerAgent;
+import org.example.menu.MenuAgent;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -55,6 +56,11 @@ public class Main {
 
 
         ContainerController containerController = rt.createMainContainer(p);
+
+        containerController.createNewAgent(
+                "Menu",
+                MenuAgent.class.getName(),
+                new String[]{"Тест"}).start();
 
         containerController.createNewAgent(
                 "Michael Scott",
