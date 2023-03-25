@@ -1,11 +1,12 @@
 package org.example;
 
-import org.example.temporal_agent.Controller;
+
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import jade.core.Runtime;
+import org.example.manager.ManagerAgent;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws StaleProxyException, IOException, ParseException {
         System.out.println("Hello world!");
-        Controller controller = new Controller();
+//        Controller controller = new Controller();
 
         final Runtime rt = Runtime.instance();
         final Profile p = new ProfileImpl();
@@ -55,8 +56,8 @@ public class Main {
         ContainerController containerController = rt.createMainContainer(p);
 
         containerController.createNewAgent(
-                "hahah",
-                Controller.class.getName(),
+                "Michael Scott",
+                ManagerAgent.class.getName(),
                 new String[]{"Тест"}).start();
     }
 

@@ -22,9 +22,9 @@ public class MakeOrder extends Behaviour {
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
         msg.addReceiver(new AID("Manager", AID.ISLOCALNAME));
         try {
-            Message message = new Message(myAgent.getLocalName(), items.toString());
-            msg.setContentObject(message);
-            myAgent.send(msg);
+            //Message message = new Message(myAgent.getLocalName(), items.toString());
+            //msg.setContentObject(message);
+            //myAgent.send(msg);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
