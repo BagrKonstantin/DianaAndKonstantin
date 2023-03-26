@@ -3,10 +3,7 @@ package org.example.storage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.example.menu.MenuAgent;
 import org.example.menu.MenuItem;
@@ -15,7 +12,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import org.json.simple.parser.*;
-import org.w3c.dom.ls.LSOutput;
 
 
 public class Storage {
@@ -43,18 +39,18 @@ public class Storage {
     public Map<Long, MenuItem> getUpdatedMenu() {
         Map<Long, MenuItem> newMenu = new HashMap<>();
         for (var item : MenuAgent.menu.values()) {
-            var boba = MenuAgent.cards.get(item.getMenu_dish_card());
-            for(var i : boba.getOper().values()) {
-                for(var m : i.getOper_products()) {
-                    boolean flag = true;
-                    for (var p : storage.keySet()) {
-                        if (!m.getProd_type().equals(p)) {
+            var card = MenuAgent.cards.get(item.getMenu_dish_card());
+            for(var operations : card.getOper().values()) {
+                boolean flag = true;
+                for(var operProds : operations.getOper_products()) {
+                    for (var p : storage.values()) {
+                        if (Objects.equals(operProds.getProd_type(), p.prod_item_type) && operProds.getProd_q() > p.prod_item_quantity) {
                             flag = false;
                         }
                     }
-                    if (flag == true) {
-                        newMenu.put(item.getId(), item);
-                    }
+                }
+                if (flag) {
+                    newMenu.put(item.getId(), item);
                 }
             }
         }

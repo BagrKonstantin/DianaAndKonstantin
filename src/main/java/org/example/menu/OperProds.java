@@ -6,6 +6,10 @@ public class OperProds {
     Long prod_type;
     Double prod_quantity;
 
+    public Double getProd_q() {
+        return prod_quantity;
+    }
+
     public Long getProd_type() {
         return prod_type;
     }
