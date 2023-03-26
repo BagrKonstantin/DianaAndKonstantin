@@ -33,7 +33,7 @@ public class Main {
         File file = new File(path + "logging.properties");
         LogManager.getLogManager().readConfiguration(file.toURL().openStream());
 
-        Logger.getGlobal().info("HAHAHAHAHAHA");
+        Logger.getGlobal().info("Hello world");
 
 
         // Всё на соплях, но вроде даже работает:З

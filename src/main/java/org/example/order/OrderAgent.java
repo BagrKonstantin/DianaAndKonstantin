@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class OrderAgent extends Agent {
     AID customerAID;
@@ -59,6 +60,8 @@ public class OrderAgent extends Agent {
         for (var item : order) {
             int processNumber = ProcessAgent.getProcessNumbers();
             try {
+                Logger.getGlobal().info(getAID().getLocalName() + " created new Process agent");
+
                 approximateTime += MenuAgent.cards.get(MenuAgent.menu.get(item).getMenu_dish_card()).getCard_time();
                 AgentGenerator.addAgent("Process " + processNumber, ProcessAgent.class.getName(), new Object[]{MenuAgent.menu.get(item).getMenu_dish_card(), getAID()});
             } catch (StaleProxyException e) {
@@ -85,10 +88,13 @@ public class OrderAgent extends Agent {
 
                         }
                         if (msg.getPerformative() == ACLMessage.CONFIRM) {
+
                             System.out.println("ORDER DIED");
                             approximateTime -= (Double) message.get("time");
                             ++ready;
                             if (ready == order.size()) {
+                                Logger.getGlobal().info(getAID().getLocalName() + " was killed");
+
                                 status = statuses.READY;
                                 (myAgent).removeBehaviour(((OrderAgent)myAgent).behaviour);
                                 sendNotification();

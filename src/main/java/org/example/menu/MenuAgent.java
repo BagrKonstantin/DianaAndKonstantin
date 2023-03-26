@@ -105,6 +105,8 @@ public class MenuAgent extends Agent {
                         System.out.println("Menu recieved: " + json);
 
                         if (msg.getPerformative() == ACLMessage.REQUEST) {
+                            Logger.getGlobal().info(myAgent.getAID().getLocalName() + " request new menu from storage");
+
                             requests.add(msg.getSender());
                             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
                             aclMessage.addReceiver(storage);
@@ -113,6 +115,8 @@ public class MenuAgent extends Agent {
 
 
                         if (msg.getPerformative() == ACLMessage.CONFIRM) {
+                            Logger.getGlobal().info(myAgent.getAID().getLocalName() + " sent new menu to manager");
+
                             ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
                             aclMessage.addReceiver(requests.poll());
                             System.out.println(json);
