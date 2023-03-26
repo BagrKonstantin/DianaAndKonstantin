@@ -30,6 +30,7 @@ public class Main {
     public static void main(String[] args) throws ControllerException, IOException, ParseException {
 
         String path = Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        path = path + (path.endsWith("/") ? "": "/../");
         File file = new File(path + "logging.properties");
         LogManager.getLogManager().readConfiguration(file.toURL().openStream());
 

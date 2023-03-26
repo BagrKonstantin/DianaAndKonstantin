@@ -29,7 +29,9 @@ public class Storage extends Agent {
     public static final String AGENT_TYPE = "storage";
 
     public Storage() throws IOException, ParseException {
-        File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/products.txt");
+        String path = Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        path = path + (path.endsWith("/") ? "": "/../");
+        File file = new File(path + "input/products.txt");
 
         JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
 

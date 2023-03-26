@@ -33,8 +33,11 @@ public class MenuAgent extends Agent {
     public MenuAgent() throws IOException, ParseException {
         menu = new HashMap<>();
         cards = new HashMap<>();
-        File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/menu_dishes.txt");
-        File file2 = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/dish_cards.txt");
+        String path = Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        path = path + (path.endsWith("/") ? "": "/../");
+
+        File file = new File(path + "input/menu_dishes.txt");
+        File file2 = new File(path + "input/dish_cards.txt");
 
 
         JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
