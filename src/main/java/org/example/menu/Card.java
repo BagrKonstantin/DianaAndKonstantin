@@ -18,6 +18,10 @@ public class Card {
     Long equip_type;
     Map<Long, Operations> oper;
 
+    public Map<Long, Operations> getOper() {
+        return oper;
+    }
+
     public Card(JSONObject stuff) {
         oper = new HashMap<>();
         this.card_id = (Long) stuff.get("card_id");
