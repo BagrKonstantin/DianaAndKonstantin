@@ -53,6 +53,10 @@ public class ProcessAgent extends Agent {
     class waitForFreeStuff extends Behaviour {
         boolean hasCooker = false;
         boolean hasEquipment = false;
+        boolean started = false;
+
+        AID equipment;
+        AID cook;
 
         @Override
         public void action() {
@@ -80,19 +84,30 @@ public class ProcessAgent extends Agent {
                                 sendProposeDenyMessage(msg.getSender());
                             } else {
                                 hasCooker = true;
+                                cook = msg.getSender();
                                 System.out.println("Cooker was found");
-                                sendProposeConfirmMessage(msg.getSender());
+
                             }
                         }
                         if (message.get("propose").equals(EquipmentAgent.AGENT_TYPE)) {
                             if (hasEquipment) {
                                 sendProposeDenyMessage(msg.getSender());
                             } else {
+                                equipment = msg.getSender();
                                 hasEquipment = true;
                                 System.out.println("Equipment was found");
-                                sendProposeConfirmMessage(msg.getSender());
                             }
                         }
+                        if (!started && hasCooker && hasEquipment) {
+                            sendProposeConfirmMessage(cook);
+                            sendProposeConfirmMessage(equipment);
+                            started = true;
+                        }
+                    }
+                    if (msg.getPerformative() == ACLMessage.INFORM) {
+                        System.out.println("Process is ready");
+                        sendDoneMessage(equipment);
+
                     }
                 } catch (UnreadableException e) {
                     throw new RuntimeException(e);
@@ -125,6 +140,7 @@ public class ProcessAgent extends Agent {
         try {
             JSONObject message = new JSONObject();
             message.put("propose", "confirm");
+            message.put("card", dishCardId);
             msg.setContentObject(message);
             send(msg);
         } catch (Exception e) {
@@ -138,6 +154,19 @@ public class ProcessAgent extends Agent {
         try {
             JSONObject message = new JSONObject();
             message.put("propose", "rejected");
+            msg.setContentObject(message);
+            send(msg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendDoneMessage(AID aid) {
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        msg.addReceiver(aid);
+        try {
+            JSONObject message = new JSONObject();
+            message.put("inform", "finished");
             msg.setContentObject(message);
             send(msg);
         } catch (Exception e) {

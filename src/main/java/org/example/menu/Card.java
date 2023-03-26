@@ -37,5 +37,9 @@ public class Card {
     public Long getEquip_type() {
         return equip_type;
     }
+
+    public Double getCard_time() {
+        return card_time;
+    }
 }
 

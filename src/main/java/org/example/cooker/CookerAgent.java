@@ -13,6 +13,8 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import org.example.equipment.EquipmentAgent;
 import org.example.manager.ManagerAgent;
+import org.example.menu.Card;
+import org.example.menu.MenuAgent;
 import org.example.order.OrderAgent;
 import org.example.process.ProcessAgent;
 import org.json.simple.JSONObject;
@@ -24,6 +26,8 @@ import java.util.List;
 public class CookerAgent extends Agent {
 
     boolean isBusy = false;
+    Card card;
+
 
     public static final String AGENT_TYPE = "cooker";
 
@@ -49,10 +53,7 @@ public class CookerAgent extends Agent {
         JSONObject message = new JSONObject();
         message.put("propose", AGENT_TYPE);
         msg.setContentObject(message);
-        if (result.length > 0) {
-            System.out.println(result[0].getName());
 
-        }
         send(msg);
     }
 
@@ -109,12 +110,20 @@ public class CookerAgent extends Agent {
 //                        }
                     }
                     if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
-                        System.out.println("Working");
+                        card = MenuAgent.cards.get(message.get("card"));
+                        System.out.println(card);
+                        System.out.println("Cooker working");
+
+                        Thread.sleep((int)(card.getCard_time() * 1000));
+                        sendFinished(msg.getSender());
+                        isBusy = false;
                     }
                     if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL) {
                         isBusy = false;
                     }
                 } catch (UnreadableException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -132,6 +141,19 @@ public class CookerAgent extends Agent {
         try {
             JSONObject message = new JSONObject();
             message.put("propose", AGENT_TYPE);
+            msg.setContentObject(message);
+            send(msg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendFinished(AID aid) {
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        msg.addReceiver(aid);
+        try {
+            JSONObject message = new JSONObject();
+            message.put("inform", AGENT_TYPE);
             msg.setContentObject(message);
             send(msg);
         } catch (Exception e) {

@@ -62,15 +62,15 @@ public class CustomerAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
-            Object[] args = getArguments();
-            this.vis_name = (String) ((JSONObject) args[0]).get("vis_name");
-            this.vis_ord_started =  LocalDateTime.parse((String) ((JSONObject) args[0]).get("vis_ord_started"));
-            this.vis_ord_ended = LocalDateTime.parse((String) ((JSONObject) args[0]).get("vis_ord_ended"));
-            this.vis_ord_total = (Long) ((JSONObject) args[0]).get("vis_ord_total");
-            vis_ord_dishes = new ArrayList<>();
-            for (Object item : (JSONArray) ((JSONObject) args[0]).get("vis_ord_dishes")) {
-                vis_ord_dishes.add(new CusOrdDish((JSONObject)item));
-            }
+        Object[] args = getArguments();
+        this.vis_name = (String) ((JSONObject) args[0]).get("vis_name");
+        this.vis_ord_started = LocalDateTime.parse((String) ((JSONObject) args[0]).get("vis_ord_started"));
+        this.vis_ord_ended = LocalDateTime.parse((String) ((JSONObject) args[0]).get("vis_ord_ended"));
+        this.vis_ord_total = (Long) ((JSONObject) args[0]).get("vis_ord_total");
+        vis_ord_dishes = new ArrayList<>();
+        for (Object item : (JSONArray) ((JSONObject) args[0]).get("vis_ord_dishes")) {
+            vis_ord_dishes.add(new CusOrdDish((JSONObject) item));
+        }
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         findManager();
         // addBehaviour(new MakeOrder());
@@ -165,14 +165,12 @@ public class CustomerAgent extends Agent {
                 JSONObject message = new JSONObject();
                 message.put("request", "order");
                 JSONArray jsonArray = new JSONArray();
-                for (var item: vis_ord_dishes) {
-                    for (var key : menu.values()) {
-                        if (key.getId().equals(item.getOrd_dish_id())) {
-                            jsonArray.add(item.getOrd_dish_id());
-                        }
+                for (var item : vis_ord_dishes) {
+                    if (menu.containsKey(item.getMenu_dish())) {
+                        jsonArray.add(item.getMenu_dish());
                     }
+
                 }
-                System.out.println(jsonArray);
                 message.put("order", jsonArray);
                 msg.setContentObject(message);
                 myAgent.send(msg);

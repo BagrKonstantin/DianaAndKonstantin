@@ -97,14 +97,16 @@ public class EquipmentAgent extends Agent {
                                 sendProposeConfirmMessage(msg.getSender());
                             }
                         }
-//                        if (message.get("propose").equals(EquipmentAgent.AGENT_TYPE)) {
-//                            if (message.get(EquipmentAgent.AGENT_TYPE) == card.getEquip_type()) {
-//                                sendProposeMessage(msg.getSender());
-//                            }
-//                        }
-                    }
-                    if (msg.getPerformative() == ACLMessage.CONFIRM) {
 
+                    }
+                    if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+                        System.out.println("Equipment working");
+                    }
+                    if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL) {
+                        isBusy = false;
+                    }
+                    if (msg.getPerformative() == ACLMessage.INFORM) {
+                        isBusy = false;
                     }
                 } catch (UnreadableException e) {
                     throw new RuntimeException(e);

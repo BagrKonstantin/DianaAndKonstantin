@@ -14,4 +14,8 @@ public class CusOrdDish {
     public Long getOrd_dish_id() {
         return ord_dish_id;
     }
+
+    public Long getMenu_dish() {
+        return menu_dish;
+    }
 }
