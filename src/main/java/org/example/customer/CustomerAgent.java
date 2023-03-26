@@ -196,6 +196,10 @@ public class CustomerAgent extends Agent {
                 try {
                     JSONObject message = (JSONObject) msg.getContentObject();
                     System.out.println(message);
+
+                    if (msg.getPerformative() == ACLMessage.CONFIRM) {
+                        doDelete();
+                    }
                 } catch (UnreadableException e) {
                     throw new RuntimeException(e);
                 }

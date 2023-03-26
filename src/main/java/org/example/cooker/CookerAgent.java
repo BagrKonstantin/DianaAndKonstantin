@@ -119,7 +119,7 @@ public class CookerAgent extends Agent {
                         System.out.println(card);
                         System.out.println("Cooker working");
 
-                        Thread.sleep((int)(card.getCard_time() * 1000));
+                        Thread.sleep((int)(card.getCard_time() * 1000 * 60));
                         sendFinished(msg.getSender());
                         isBusy = false;
                     }
