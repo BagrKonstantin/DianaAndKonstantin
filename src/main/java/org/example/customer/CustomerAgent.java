@@ -15,12 +15,19 @@ import org.example.manager.ManagerAgent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
 public class CustomerAgent extends Agent {
+
+    String vis_name;
+    LocalDateTime vis_ord_started;
+    LocalDateTime vis_ord_ended;
+    Long vis_ord_total;
+    List<CusOrdDish> vis_ord_dishes;
 
     public static final String AGENT_TYPE = "customer";
 
@@ -53,6 +60,16 @@ public class CustomerAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
+            Object[] args = getArguments();
+            this.vis_name = (String) ((JSONObject) args[0]).get("vis_name");
+            this.vis_ord_started =  LocalDateTime.parse((String) ((JSONObject) args[0]).get("vis_ord_started"));
+            this.vis_ord_ended = LocalDateTime.parse((String) ((JSONObject) args[0]).get("vis_ord_ended"));
+            this.vis_ord_total = (Long) ((JSONObject) args[0]).get("vis_ord_total");
+            vis_ord_dishes = new ArrayList<>();
+            for (Object item : (JSONArray) ((JSONObject) args[0]).get("vis_ord_dishes")) {
+                vis_ord_dishes.add(new CusOrdDish((JSONObject)item));
+                System.out.println("Hui");
+            }
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         findManager();
         // addBehaviour(new MakeOrder());
@@ -159,7 +176,9 @@ public class CustomerAgent extends Agent {
                 JSONObject message = new JSONObject();
                 message.put("request", "order");
                 JSONArray jsonArray = new JSONArray();
-                jsonArray.add(new JSONObject() {{put("1", "2");}});
+                jsonArray.add(new JSONObject() {{
+                    put("1", "2");
+                }});
                 message.put("order", jsonArray);
                 msg.setContentObject(message);
                 myAgent.send(msg);
@@ -197,6 +216,5 @@ public class CustomerAgent extends Agent {
             return receivedOrder;
         }
     }
-
-
 }
+

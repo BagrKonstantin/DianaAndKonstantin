@@ -13,8 +13,11 @@ import org.example.menu.MenuAgent;
 import org.example.storage.Storage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
@@ -24,7 +27,7 @@ public class Main {
         System.out.println("Hello world!");
 
 //        Controller controller = new Controller();
-//          Storage a = new Storage();
+         MenuAgent a = new MenuAgent();
 
 
 
@@ -74,12 +77,20 @@ public class Main {
 //                "Cumstomer",
 //                CustomerAgent.class.getName(),
 //                new String[]{}).start();
+        File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/visitors_orders.txt");
 
+        JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
         AgentGenerator agentGenerator = new AgentGenerator();
         AgentGenerator.addAgent("Menu", MenuAgent.class.getName());
         AgentGenerator.addAgent("Michael Scott", ManagerAgent.class.getName());
-        AgentGenerator.addAgent("Cumstomer", CustomerAgent.class.getName());
-        AgentGenerator.addAgent("Cumstomer2", CustomerAgent.class.getName());
+        for (Object item : (JSONArray) o.get("visitors_orders")) {
+            JSONObject productObject = (JSONObject) item;
+            if (productObject.containsKey("vis_name")) {
+                AgentGenerator.addAgent((String) ((JSONObject) item).get("vis_name"), CustomerAgent.class.getName(), new  Object[] {item});
+            }
+        }
+        // AgentGenerator.addAgent("Cumstomer", CustomerAgent.class.getName());
+        // AgentGenerator.addAgent("Cumstomer2", CustomerAgent.class.getName());
     }
 
 
