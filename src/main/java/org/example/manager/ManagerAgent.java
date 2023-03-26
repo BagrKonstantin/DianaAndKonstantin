@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.logging.Logger;
 
 public class ManagerAgent extends Agent {
 
@@ -78,6 +79,8 @@ public class ManagerAgent extends Agent {
                         System.out.println("Manager recieved: " + json);
                         if (msg.getPerformative() == ACLMessage.REQUEST) {
                             if (json.get(REQUEST).equals("menu")) {
+                                Logger.getGlobal().info(myAgent.getAID().getLocalName() + " request menu from menu");
+
 
                                 ((ManagerAgent) myAgent).menuRequest.add(msg.getSender());
 
@@ -88,10 +91,14 @@ public class ManagerAgent extends Agent {
                                 aclMessage.setContentObject(message);
                                 myAgent.send(aclMessage);
                             } else if (json.get(REQUEST).equals("order")) {
+                                Logger.getGlobal().info(myAgent.getAID().getLocalName() + " created order");
+
                                 int orderNumber = OrderAgent.getOrderNumbers();
                                 AgentGenerator.addAgent("Order " + orderNumber, OrderAgent.class.getName(), new Object[]{msg.getSender(), json.get("order"), orderNumber});
                             }
                         } else if (msg.getPerformative() == ACLMessage.CONFIRM) {
+                            Logger.getGlobal().info(myAgent.getAID().getLocalName() + " sended menu to customer");
+
                             System.out.println("Got answer from menu");
                             ACLMessage aclMessage = new ACLMessage();
                             aclMessage.addReceiver(((ManagerAgent) myAgent).menuRequest.poll());

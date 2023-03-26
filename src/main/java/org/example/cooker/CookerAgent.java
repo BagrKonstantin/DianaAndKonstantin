@@ -22,6 +22,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CookerAgent extends Agent {
     Long cook_id;
@@ -60,6 +61,7 @@ public class CookerAgent extends Agent {
 
     protected void setup() {
 
+
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
@@ -76,6 +78,7 @@ public class CookerAgent extends Agent {
         //equipmentTypeId = (Long) args[0];
         this.cook_name = (String) ((JSONObject) args[0]).get("cook_name");
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
+
         addBehaviour(new TickerBehaviour(this, 1000) {
 
             @Override
@@ -102,6 +105,7 @@ public class CookerAgent extends Agent {
                 try {
                     JSONObject message = (JSONObject) msg.getContentObject();
                     if (msg.getPerformative() == ACLMessage.PROPOSE) {
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " got propose to work");
                         if (message.get("propose").equals("work")) {
                             if (!isBusy) {
                                 sendProposeConfirmMessage(msg.getSender());
@@ -114,6 +118,8 @@ public class CookerAgent extends Agent {
 //                        }
                     }
                     if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " started to work");
+
                         isBusy = true;
 
                         card = MenuAgent.cards.get(message.get("card"));
@@ -123,8 +129,11 @@ public class CookerAgent extends Agent {
                         Thread.sleep((int)(card.getCard_time() * 1000 * 60));
                         sendFinished(msg.getSender());
                         isBusy = false;
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " finished work");
+
                     }
                     if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL) {
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " got reject to work");
                         isBusy = false;
                     }
                 } catch (UnreadableException e) {

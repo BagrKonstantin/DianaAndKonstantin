@@ -15,6 +15,8 @@ import org.example.menu.Card;
 import org.example.menu.MenuAgent;
 import org.json.simple.JSONObject;
 
+import java.util.logging.Logger;
+
 public class ProcessAgent extends Agent {
 
     public static final String AGENT_TYPE = "process";
@@ -106,6 +108,8 @@ public class ProcessAgent extends Agent {
                             }
                         }
                         if (!started && hasCooker && hasEquipment) {
+                            Logger.getGlobal().info(getAID().getLocalName() + " found cooker and equipment");
+
                             sendProposeConfirmMessage(cook);
                             sendProposeConfirmMessage(equipment);
                             started = true;
@@ -121,6 +125,8 @@ public class ProcessAgent extends Agent {
                         } catch (FIPAException fe) {
                             fe.printStackTrace();
                         }
+                        Logger.getGlobal().info(getAID().getLocalName() + " was killed");
+
                         doDelete();
                     }
                 } catch (UnreadableException e) {

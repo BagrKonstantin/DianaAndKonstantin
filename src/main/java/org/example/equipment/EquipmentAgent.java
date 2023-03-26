@@ -16,6 +16,7 @@ import org.example.process.ProcessAgent;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class EquipmentAgent extends Agent {
 
@@ -98,6 +99,7 @@ public class EquipmentAgent extends Agent {
                 try {
                     JSONObject message = (JSONObject) msg.getContentObject();
                     if (msg.getPerformative() == ACLMessage.PROPOSE) {
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " got proposal to work");
                         if (message.get("propose").equals("work")) {
                             if (!isBusy) {
                                 isBusy = true;
@@ -107,12 +109,16 @@ public class EquipmentAgent extends Agent {
 
                     }
                     if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " started working");
+
                         System.out.println("Equipment working");
                     }
                     if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL) {
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " got proposal rejected");
                         isBusy = false;
                     }
                     if (msg.getPerformative() == ACLMessage.INFORM) {
+                        Logger.getGlobal().info(myAgent.getAID().getLocalName() + " finished work");
                         isBusy = false;
                     }
                 } catch (UnreadableException e) {
