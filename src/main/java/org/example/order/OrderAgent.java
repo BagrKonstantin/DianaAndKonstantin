@@ -38,7 +38,7 @@ public class OrderAgent extends Agent {
     private enum statuses {
         CREATED,
         IN_PROCESS,
-        FINISHED,
+        READY,
 
     }
 
@@ -53,6 +53,7 @@ public class OrderAgent extends Agent {
         orderNumber = (Integer) args[2];
         status = statuses.CREATED;
         if (order.isEmpty()) {
+            sendDoneMessage(customerAID);
             doDelete();
         }
         for (var item : order) {
@@ -64,6 +65,7 @@ public class OrderAgent extends Agent {
                 throw new RuntimeException(e);
             }
         }
+        sendNotification();
         status = statuses.IN_PROCESS;
 
 
@@ -87,8 +89,9 @@ public class OrderAgent extends Agent {
                             approximateTime -= (Double) message.get("time");
                             ++ready;
                             if (ready == order.size()) {
+                                status = statuses.READY;
                                 (myAgent).removeBehaviour(((OrderAgent)myAgent).behaviour);
-
+                                sendNotification();
                                 sendDoneMessage(customerAID);
 
                                 takeDown();
@@ -115,21 +118,25 @@ public class OrderAgent extends Agent {
 
         @Override
         public void onTick() {
+            sendNotification();
 
-            ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
-            aclMessage.addReceiver(customerAID);
-            JSONObject message = new JSONObject();
-            message.put("order", "approximate_time");
-            message.put("approximate_time", approximateTime * 60);
-            message.put("order_number", orderNumber);
-            message.put("status", status);
-            try {
-                aclMessage.setContentObject(message);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            myAgent.send(aclMessage);
         }
+    }
+
+    private void sendNotification() {
+        ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
+        aclMessage.addReceiver(customerAID);
+        JSONObject message = new JSONObject();
+        message.put("order", "approximate_time");
+        message.put("approximate_time", approximateTime * 60);
+        message.put("order_number", orderNumber);
+        message.put("status", status);
+        try {
+            aclMessage.setContentObject(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        send(aclMessage);
     }
 
     private void sendDoneMessage(AID aid) {

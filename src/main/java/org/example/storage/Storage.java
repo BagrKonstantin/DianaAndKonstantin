@@ -30,7 +30,6 @@ public class Storage extends Agent {
     public Storage() throws IOException, ParseException {
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/products.txt");
 
-        System.out.println(file.getPath());
         JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
 
         storage = new HashMap<>();
@@ -40,7 +39,6 @@ public class Storage extends Agent {
             if (productObject.containsKey("prod_item_id")) {
                 long id = (Long) ((JSONObject) item).get("prod_item_id");
                 storage.put(id, new Product((JSONObject) item));
-                System.out.println("get");
             }
         }
 

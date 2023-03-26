@@ -21,12 +21,22 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Main {
 
 
     public static void main(String[] args) throws ControllerException, IOException, ParseException {
-        System.out.println("Hello world!");
+
+        String path = Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        File file = new File(path + "logging.properties");
+        LogManager.getLogManager().readConfiguration(file.toURL().openStream());
+
+        Logger.getGlobal().info("HAHAHAHAHAHA");
+
+
+        // Всё на соплях, но вроде даже работает:З
 
 //        Controller controller = new Controller();
 
@@ -84,9 +94,10 @@ public class Main {
         AgentGenerator.addAgent("Storage", Storage.class.getName());
         AgentGenerator.addAgent("Michael Scott", ManagerAgent.class.getName());
 
-        File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/visitors_orders.txt");
 
-        JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
+        File f = new File(path + "input/visitors_orders.txt");
+
+        JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(f.getPath()));
 
         for (Object item : (JSONArray) o.get("visitors_orders")) {
             JSONObject productObject = (JSONObject) item;
@@ -95,7 +106,7 @@ public class Main {
             }
         }
 
-        File file1 = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/equipment.txt");
+        File file1 = new File(path + "input/equipment.txt");
 
         JSONObject j = (JSONObject) new JSONParser().parse(new FileReader(file1.getPath()));
 
@@ -110,7 +121,7 @@ public class Main {
         //AgentGenerator.addAgent("Cumstomer", CustomerAgent.class.getName());
         // AgentGenerator.addAgent("Cumstomer2", CustomerAgent.class.getName());
 
-        File file2 = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/cookers.txt");
+        File file2 = new File(path + "input/cookers.txt");
 
         JSONObject k = (JSONObject) new JSONParser().parse(new FileReader(file2.getPath()));
 

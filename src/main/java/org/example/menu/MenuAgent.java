@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class MenuAgent extends Agent {
     public static Map<Long, MenuItem> menu;
@@ -35,7 +36,7 @@ public class MenuAgent extends Agent {
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/menu_dishes.txt");
         File file2 = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/dish_cards.txt");
 
-        System.out.println(file.getPath());
+
         JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
         JSONObject j = (JSONObject) new JSONParser().parse(new FileReader(file2.getPath()));
         for (Object item : (JSONArray) o.get("menu_dishes")) {
@@ -43,7 +44,6 @@ public class MenuAgent extends Agent {
             if (productObject.containsKey("menu_dish_id")) {
                 Long id = (Long) ((JSONObject) item).get("menu_dish_id");
                 menu.put(id, new MenuItem((JSONObject) item));
-                System.out.println("get");
             }
         }
 
@@ -52,7 +52,6 @@ public class MenuAgent extends Agent {
             if (productObject.containsKey("card_id")) {
                 Long id = (Long) ((JSONObject) item).get("card_id");
                 cards.put(id, new Card((JSONObject) item));
-                System.out.println("get");
             }
         }
     }
