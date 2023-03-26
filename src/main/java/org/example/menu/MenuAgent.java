@@ -25,18 +25,30 @@ import java.util.Map;
 
 public class MenuAgent extends Agent {
     Map<Long, MenuItem> menu;
+    Map<Long, Card> cards;
     public MenuAgent() throws IOException, ParseException {
-        menu = new HashMap();
+        menu = new HashMap<>();
+        cards = new HashMap<>();
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/menu_dishes.txt");
+        File file2 = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/dish_cards.txt");
 
         System.out.println(file.getPath());
         JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
-
+        JSONObject j = (JSONObject) new JSONParser().parse(new FileReader(file2.getPath()));
         for (Object item : (JSONArray) o.get("menu_dishes")) {
             JSONObject productObject = (JSONObject) item;
             if (productObject.containsKey("menu_dish_id")) {
                 Long id = (Long) ((JSONObject) item).get("menu_dish_id");
                 menu.put(id, new MenuItem((JSONObject) item));
+                System.out.println("get");
+            }
+        }
+
+        for (Object item : (JSONArray) j.get("dish_cards")) {
+            JSONObject productObject = (JSONObject) item;
+            if (productObject.containsKey("card_id")) {
+                Long id = (Long) ((JSONObject) item).get("card_id");
+                cards.put(id, new Card((JSONObject) item));
                 System.out.println("get");
             }
         }
