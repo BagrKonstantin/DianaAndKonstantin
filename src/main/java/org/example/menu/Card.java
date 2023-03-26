@@ -33,5 +33,9 @@ public class Card {
             }
         }
     }
+
+    public Long getEquip_type() {
+        return equip_type;
+    }
 }
 

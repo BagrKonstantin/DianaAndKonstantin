@@ -150,7 +150,6 @@ public class CustomerAgent extends Agent {
                 message.put("request", "order");
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.add(28L);
-                jsonArray.add(36L);
                 message.put("order", jsonArray);
                 msg.setContentObject(message);
                 myAgent.send(msg);

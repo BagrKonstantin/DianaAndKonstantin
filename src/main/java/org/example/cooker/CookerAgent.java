@@ -2,6 +2,7 @@ package org.example.cooker;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
@@ -9,8 +10,11 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
+import org.example.equipment.EquipmentAgent;
 import org.example.manager.ManagerAgent;
 import org.example.order.OrderAgent;
+import org.example.process.ProcessAgent;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -19,7 +23,7 @@ import java.util.List;
 
 public class CookerAgent extends Agent {
 
-    boolean isBusy;
+    boolean isBusy = false;
 
     public static final String AGENT_TYPE = "cooker";
 
@@ -27,9 +31,11 @@ public class CookerAgent extends Agent {
     protected void notifyAllProcesses() throws IOException {
 
         ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
+
+
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
-        sd.setType(OrderAgent.AGENT_TYPE);
+        sd.setType(ProcessAgent.AGENT_TYPE);
         template.addServices(sd);
         DFAgentDescription[] result;
         try {
@@ -43,6 +49,10 @@ public class CookerAgent extends Agent {
         JSONObject message = new JSONObject();
         message.put("propose", AGENT_TYPE);
         msg.setContentObject(message);
+        if (result.length > 0) {
+            System.out.println(result[0].getName());
+
+        }
         send(msg);
     }
 
@@ -65,11 +75,67 @@ public class CookerAgent extends Agent {
             @Override
             protected void onTick() {
                 try {
-                    ((CookerAgent)myAgent).notifyAllProcesses();
+                    if (!isBusy) {
+                        ((CookerAgent)myAgent).notifyAllProcesses();
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         });
+
+        addBehaviour(new waitForProposal());
+    }
+
+    private class waitForProposal extends Behaviour{
+        @Override
+        public void action() {
+            ACLMessage msg = myAgent.receive();
+
+            if (msg != null) {
+                try {
+                    JSONObject message = (JSONObject) msg.getContentObject();
+                    if (msg.getPerformative() == ACLMessage.PROPOSE) {
+                        if (message.get("propose").equals("work")) {
+                            if (!isBusy) {
+                                isBusy = true;
+                                sendProposeConfirmMessage(msg.getSender());
+                            }
+                        }
+//                        if (message.get("propose").equals(EquipmentAgent.AGENT_TYPE)) {
+//                            if (message.get(EquipmentAgent.AGENT_TYPE) == card.getEquip_type()) {
+//                                sendProposeMessage(msg.getSender());
+//                            }
+//                        }
+                    }
+                    if (msg.getPerformative() == ACLMessage.CONFIRM) {
+
+                    }
+                    if (msg.getPerformative() == ACLMessage.DISCONFIRM) {
+                        isBusy = false;
+                    }
+                } catch (UnreadableException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        @Override
+        public boolean done() {
+            return false;
+        }
+    }
+
+    private void sendProposeConfirmMessage(AID aid) {
+        ACLMessage msg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+        msg.addReceiver(aid);
+        try {
+            JSONObject message = new JSONObject();
+            message.put("propose", AGENT_TYPE);
+            msg.setContentObject(message);
+            send(msg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

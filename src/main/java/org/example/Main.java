@@ -7,7 +7,9 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import jade.core.Runtime;
+import org.example.cooker.CookerAgent;
 import org.example.customer.CustomerAgent;
+import org.example.equipment.EquipmentAgent;
 import org.example.manager.ManagerAgent;
 import org.example.menu.MenuAgent;
 import org.example.storage.Storage;
@@ -80,6 +82,16 @@ public class Main {
         AgentGenerator.addAgent("Michael Scott", ManagerAgent.class.getName());
         AgentGenerator.addAgent("Cumstomer", CustomerAgent.class.getName());
         AgentGenerator.addAgent("Cumstomer2", CustomerAgent.class.getName());
+
+
+
+        AgentGenerator.addAgent("Cook1", CookerAgent.class.getName());
+        AgentGenerator.addAgent("Cook2", CookerAgent.class.getName());
+
+        AgentGenerator.addAgent("Equipment", EquipmentAgent.class.getName(), new Object[] {2L});
+        AgentGenerator.addAgent("Equipment2", EquipmentAgent.class.getName(), new Object[] {25L});
+
+
     }
 
 

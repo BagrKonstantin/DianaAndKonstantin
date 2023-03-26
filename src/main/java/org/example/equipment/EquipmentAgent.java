@@ -1,14 +1,18 @@
 package org.example.equipment;
 
+import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import org.example.cooker.CookerAgent;
 import org.example.order.OrderAgent;
+import org.example.process.ProcessAgent;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -26,7 +30,7 @@ public class EquipmentAgent extends Agent {
         ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
-        sd.setType(OrderAgent.AGENT_TYPE);
+        sd.setType(ProcessAgent.AGENT_TYPE);
         template.addServices(sd);
         DFAgentDescription[] result;
         try {
@@ -58,19 +62,73 @@ public class EquipmentAgent extends Agent {
             fe.printStackTrace();
         }
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
+
+        Object[] args = getArguments();
+        equipmentTypeId = (Long) args[0];
         addBehaviour(new TickerBehaviour(this, 1000) {
 
             @Override
             protected void onTick() {
                 try {
-                    ((EquipmentAgent)myAgent).notifyAllProcesses();
+                    if (!isBusy) {
+                        ((EquipmentAgent)myAgent).notifyAllProcesses();
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         });
+
+        addBehaviour(new waitForProposal());
     }
 
+    private class waitForProposal extends Behaviour {
+        @Override
+        public void action() {
+            ACLMessage msg = myAgent.receive();
 
+            if (msg != null) {
+                try {
+                    JSONObject message = (JSONObject) msg.getContentObject();
+                    if (msg.getPerformative() == ACLMessage.PROPOSE) {
+                        if (message.get("propose").equals("work")) {
+                            if (!isBusy) {
+                                isBusy = true;
+                                sendProposeConfirmMessage(msg.getSender());
+                            }
+                        }
+//                        if (message.get("propose").equals(EquipmentAgent.AGENT_TYPE)) {
+//                            if (message.get(EquipmentAgent.AGENT_TYPE) == card.getEquip_type()) {
+//                                sendProposeMessage(msg.getSender());
+//                            }
+//                        }
+                    }
+                    if (msg.getPerformative() == ACLMessage.CONFIRM) {
+
+                    }
+                } catch (UnreadableException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        @Override
+        public boolean done() {
+            return false;
+        }
+    }
+
+    private void sendProposeConfirmMessage(AID aid) {
+        ACLMessage msg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+        msg.addReceiver(aid);
+        try {
+            JSONObject message = new JSONObject();
+            message.put("propose", AGENT_TYPE);
+            msg.setContentObject(message);
+            send(msg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
