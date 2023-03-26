@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CookerAgent extends Agent {
-
+    Long cook_id;
+    String cook_name;
     boolean isBusy = false;
     Card card;
 
@@ -70,6 +71,10 @@ public class CookerAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
+        Object[] args = getArguments();
+        this.cook_id = (Long) ((JSONObject) args[0]).get("cook_id");
+        //equipmentTypeId = (Long) args[0];
+        this.cook_name = (String) ((JSONObject) args[0]).get("cook_name");
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         addBehaviour(new TickerBehaviour(this, 1000) {
 
