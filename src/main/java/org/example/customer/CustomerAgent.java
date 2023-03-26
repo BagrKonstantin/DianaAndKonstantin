@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 public class CustomerAgent extends Agent {
@@ -99,6 +100,7 @@ public class CustomerAgent extends Agent {
             public void action() {
                 //HashSet<MenuItem> items = menu.getMenu();
                 ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                Logger.getGlobal().info(myAgent.getAID().getLocalName() + " request menu from manager");
                 msg.addReceiver(managerId);
                 try {
                     JSONObject message = new JSONObject();
@@ -119,10 +121,9 @@ public class CustomerAgent extends Agent {
             @Override
             public void action() {
                 ACLMessage msg = myAgent.receive();
-
                 if (msg != null) {
                     System.out.println("GOT");
-
+                    Logger.getGlobal().info(myAgent.getAID().getLocalName() + "received menu from manager");
                     try {
                         JSONObject message = (JSONObject) msg.getContentObject();
                         menu = (HashMap<Long, MenuItem>) message.get("menu");
@@ -160,6 +161,7 @@ public class CustomerAgent extends Agent {
         @Override
         public void action() {
             ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+            Logger.getGlobal().info(myAgent.getAID().getLocalName() + " request order");
             msg.addReceiver(managerId);
             try {
                 JSONObject message = new JSONObject();
@@ -193,6 +195,7 @@ public class CustomerAgent extends Agent {
         public void action() {
             ACLMessage msg = myAgent.receive();
             if (msg != null) {
+                Logger.getGlobal().info(myAgent.getAID().getLocalName() + " received order");
                 try {
                     JSONObject message = (JSONObject) msg.getContentObject();
                     System.out.println(message);

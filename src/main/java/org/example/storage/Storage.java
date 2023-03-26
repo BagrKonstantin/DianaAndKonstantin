@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -65,6 +66,7 @@ public class Storage extends Agent {
             public void action() {
                 ACLMessage msg = myAgent.receive();
                 if (msg != null) {
+                    Logger.getGlobal().info(myAgent.getAID().getLocalName() + " received request for new menu");
                     try {
                         JSONObject json = (JSONObject) msg.getContentObject();
                         if (msg.getPerformative() == ACLMessage.REQUEST) {
