@@ -7,7 +7,7 @@
                         "equip_type": 25,
                         "operations": [{
                                     "oper_type": 17,
-			    "oper_time": 0.15,
+			                        "oper_time": 0.15,
                                     "oper_async_point": 0,
                                     "oper_products": [{
                                                             "prod_type": 18,
