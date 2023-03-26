@@ -10,4 +10,8 @@ public class CusOrdDish {
         this.ord_dish_id = (Long) stuff.get("ord_dish_id");
         this.menu_dish = (Long) stuff.get("menu_dish");
     }
+
+    public Long getOrd_dish_id() {
+        return ord_dish_id;
+    }
 }

@@ -166,7 +166,9 @@ public class CustomerAgent extends Agent {
                 JSONObject message = new JSONObject();
                 message.put("request", "order");
                 JSONArray jsonArray = new JSONArray();
-                jsonArray.add(28L);
+                for (var item: vis_ord_dishes) {
+                    jsonArray.add(item.getOrd_dish_id());
+                }
                 message.put("order", jsonArray);
                 msg.setContentObject(message);
                 myAgent.send(msg);
