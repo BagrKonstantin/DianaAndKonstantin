@@ -15,13 +15,13 @@ import org.example.equipment.EquipmentAgent;
 import org.example.manager.ManagerAgent;
 import org.example.menu.Card;
 import org.example.menu.MenuAgent;
+import org.example.menu.Operations;
 import org.example.order.OrderAgent;
 import org.example.process.ProcessAgent;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class CookerAgent extends Agent {
@@ -96,6 +96,23 @@ public class CookerAgent extends Agent {
         addBehaviour(new waitForProposal());
     }
 
+    class MyThread extends Thread {
+        double seconds;
+        MyThread(double seconds) {
+            this.seconds = seconds;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep((int)(seconds * 1000 * 60));
+                System.out.println("THREAD FINISHED");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     private class waitForProposal extends Behaviour{
         @Override
         public void action() {
@@ -126,7 +143,54 @@ public class CookerAgent extends Agent {
                         System.out.println(card);
                         System.out.println("Cooker working");
 
-                        Thread.sleep((int)(card.getCard_time() * 1000 * 60));
+                        //
+                        List<Operations> operations = new ArrayList<>();
+                        Set<Long> points = new HashSet<>();
+                        points.add(0L);
+                        operations.addAll(card.getOper().values());
+                        for (var operation: operations) {
+                            if (operation.getOper_async_point().equals(0L)) {
+                                Thread.sleep((int)(operation.getOper_time() * 1000 * 60));
+                            }
+                        }
+                        // асинхронщина
+                        for (int i = 0; i < operations.size(); i++) {
+                            List<MyThread> array = new ArrayList<>();
+                            List<Double> times = new ArrayList<>();
+                            for (int j = i + 1; j < operations.size(); j++) {
+                                if (!points.contains(operations.get(i).getOper_async_point())) {
+                                    if (operations.get(i).getOper_async_point().equals(operations.get(j).getOper_async_point())) {
+                                        times.add(operations.get(j).getOper_time());
+                                        System.out.println(i + " " + j);
+                                    }
+                                }
+                            }
+                            if (!times.isEmpty()) {
+                                Logger.getGlobal().info(myAgent.getAID().getLocalName() + " found async operations and decided to cut some time");
+                                times.add(operations.get(i).getOper_time());
+                            }
+                            points.add(operations.get(i).getOper_async_point());
+
+                            for (double time: times) {
+                                array.add(new MyThread(time));
+                            }
+                            for (MyThread thread: array) {
+                                thread.start();
+
+                            }
+                            if (!times.isEmpty()) {
+                                System.out.println("ASYNC STARTED");
+
+                            }
+                            for (MyThread thread: array) {
+                                thread.join();
+                            }
+
+                        }
+
+                        //System.out.println("BOTH FINISHED");
+
+
                         sendFinished(msg.getSender());
                         isBusy = false;
                         Logger.getGlobal().info(myAgent.getAID().getLocalName() + " finished work");

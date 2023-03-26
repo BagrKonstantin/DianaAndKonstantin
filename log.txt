@@ -1,159 +1,155 @@
-мар. 27, 2023 12:47:46 AM org.example.Main main
+мар. 27, 2023 2:18:31 AM org.example.Main main
 INFO: Hello world
-мар. 27, 2023 12:47:46 AM jade.core.Runtime beginContainer
+мар. 27, 2023 2:18:31 AM jade.core.Runtime beginContainer
 INFO: ----------------------------------
     This is JADE 4.6.0 - revision 6869 of 30-11-2022 14:47:03
     downloaded in Open Source, under LGPL restrictions,
     at http://jade.tilab.com/
 ----------------------------------------
-мар. 27, 2023 12:47:46 AM jade.imtp.leap.LEAPIMTPManager initialize
+мар. 27, 2023 2:18:31 AM jade.imtp.leap.LEAPIMTPManager initialize
 INFO: Listening for intra-platform commands on address:
 - jicp://192.168.56.1:8080
 
-мар. 27, 2023 12:47:46 AM jade.core.BaseService init
+мар. 27, 2023 2:18:32 AM jade.core.BaseService init
 INFO: Service jade.core.management.AgentManagement initialized
-мар. 27, 2023 12:47:46 AM jade.core.BaseService init
+мар. 27, 2023 2:18:32 AM jade.core.BaseService init
 INFO: Service jade.core.messaging.Messaging initialized
-мар. 27, 2023 12:47:46 AM jade.core.BaseService init
+мар. 27, 2023 2:18:32 AM jade.core.BaseService init
 INFO: Service jade.core.resource.ResourceManagement initialized
-мар. 27, 2023 12:47:46 AM jade.core.BaseService init
+мар. 27, 2023 2:18:32 AM jade.core.BaseService init
 INFO: Service jade.core.mobility.AgentMobility initialized
-мар. 27, 2023 12:47:46 AM jade.core.BaseService init
+мар. 27, 2023 2:18:32 AM jade.core.BaseService init
 INFO: Service jade.core.event.Notification initialized
-мар. 27, 2023 12:47:46 AM jade.mtp.http.HTTPServer <init>
+мар. 27, 2023 2:18:32 AM jade.mtp.http.HTTPServer <init>
 INFO: HTTP-MTP Using XML parser com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser
-мар. 27, 2023 12:47:46 AM jade.core.messaging.MessagingService boot
+мар. 27, 2023 2:18:32 AM jade.core.messaging.MessagingService boot
 INFO: MTP addresses:
 http://LAPTOP-ANES6M0O.mshome.net:7778/acc
-мар. 27, 2023 12:47:47 AM jade.core.AgentContainerImpl joinPlatform
+мар. 27, 2023 2:18:32 AM jade.core.AgentContainerImpl joinPlatform
 INFO: --------------------------------------
 Agent container Main-Container@192.168.56.1 is ready.
 --------------------------------------------
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$1 action
-INFO: Visitor123 request menu from manager
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$1 action
 INFO: Visitor124 request menu from manager
-мар. 27, 2023 12:47:47 AM org.example.manager.ManagerAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$1 action
+INFO: Visitor123 request menu from manager
+мар. 27, 2023 2:18:32 AM org.example.manager.ManagerAgent$1 action
 INFO: Michael Scott request menu from menu
-мар. 27, 2023 12:47:47 AM org.example.menu.MenuAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.menu.MenuAgent$1 action
 INFO: Menu request new menu from storage
-мар. 27, 2023 12:47:47 AM org.example.manager.ManagerAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.manager.ManagerAgent$1 action
 INFO: Michael Scott request menu from menu
-мар. 27, 2023 12:47:47 AM org.example.storage.Storage$1 action
+мар. 27, 2023 2:18:32 AM org.example.storage.Storage$1 action
 INFO: Storage received request for new menu
-мар. 27, 2023 12:47:47 AM org.example.menu.MenuAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.menu.MenuAgent$1 action
 INFO: Menu request new menu from storage
-мар. 27, 2023 12:47:47 AM org.example.menu.MenuAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.storage.Storage$1 action
+INFO: Storage received request for new menu
+мар. 27, 2023 2:18:32 AM org.example.menu.MenuAgent$1 action
 INFO: Menu sent new menu to manager
-мар. 27, 2023 12:47:47 AM org.example.storage.Storage$1 action
-INFO: Storage received request for new menu
-мар. 27, 2023 12:47:47 AM org.example.manager.ManagerAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.menu.MenuAgent$1 action
+INFO: Menu sent new menu to manager
+мар. 27, 2023 2:18:32 AM org.example.manager.ManagerAgent$1 action
 INFO: Michael Scott sended menu to customer
-мар. 27, 2023 12:47:47 AM org.example.menu.MenuAgent$1 action
-INFO: Menu sent new menu to manager
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$2 action
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$2 action
 INFO: Visitor123received menu from manager
-мар. 27, 2023 12:47:47 AM org.example.manager.ManagerAgent$1 action
-INFO: Michael Scott sended menu to customer
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$MakeOrder action
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$MakeOrder action
 INFO: Visitor123 request order
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$2 action
+мар. 27, 2023 2:18:32 AM org.example.manager.ManagerAgent$1 action
+INFO: Michael Scott sended menu to customer
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$2 action
 INFO: Visitor124received menu from manager
-мар. 27, 2023 12:47:47 AM org.example.manager.ManagerAgent$1 action
-INFO: Michael Scott created order
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$MakeOrder action
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$MakeOrder action
 INFO: Visitor124 request order
-мар. 27, 2023 12:47:47 AM org.example.manager.ManagerAgent$1 action
+мар. 27, 2023 2:18:32 AM org.example.manager.ManagerAgent$1 action
 INFO: Michael Scott created order
-мар. 27, 2023 12:47:47 AM org.example.order.OrderAgent setup
-INFO: Order 1 created new Process agent
-мар. 27, 2023 12:47:47 AM org.example.order.OrderAgent setup
-INFO: Order 1 created new Process agent
-мар. 27, 2023 12:47:47 AM org.example.order.OrderAgent setup
+мар. 27, 2023 2:18:32 AM org.example.manager.ManagerAgent$1 action
+INFO: Michael Scott created order
+мар. 27, 2023 2:18:32 AM org.example.order.OrderAgent setup
 INFO: Order 2 created new Process agent
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$WaitForOrder action
+мар. 27, 2023 2:18:32 AM org.example.order.OrderAgent setup
+INFO: Order 1 created new Process agent
+мар. 27, 2023 2:18:32 AM org.example.order.OrderAgent setup
+INFO: Order 1 created new Process agent
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$WaitForOrder action
 INFO: Visitor123 received order
-мар. 27, 2023 12:47:47 AM org.example.customer.CustomerAgent$WaitForOrder action
+мар. 27, 2023 2:18:32 AM org.example.customer.CustomerAgent$WaitForOrder action
 INFO: Visitor124 received order
-мар. 27, 2023 12:47:48 AM org.example.equipment.EquipmentAgent$waitForProposal action
+мар. 27, 2023 2:18:33 AM org.example.equipment.EquipmentAgent$waitForProposal action
 INFO: DAZHENG LOOKYAMI got proposal to work
-мар. 27, 2023 12:47:48 AM org.example.equipment.EquipmentAgent$waitForProposal action
+мар. 27, 2023 2:18:33 AM org.example.equipment.EquipmentAgent$waitForProposal action
 INFO: DAZHENG LOOKYAMI got proposal to work
-мар. 27, 2023 12:47:48 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. got propose to work
-мар. 27, 2023 12:47:48 AM org.example.equipment.EquipmentAgent$waitForProposal action
+мар. 27, 2023 2:18:33 AM org.example.equipment.EquipmentAgent$waitForProposal action
 INFO: DAZHENG LOOKYAMI got proposal to work
-мар. 27, 2023 12:47:48 AM org.example.process.ProcessAgent$waitForFreeStuff action
+мар. 27, 2023 2:18:33 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. got propose to work
+мар. 27, 2023 2:18:33 AM org.example.process.ProcessAgent$waitForFreeStuff action
 INFO: Process 1 found cooker and equipment
-мар. 27, 2023 12:47:48 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. got propose to work
-мар. 27, 2023 12:47:48 AM org.example.equipment.EquipmentAgent$waitForProposal action
+мар. 27, 2023 2:18:33 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. got propose to work
+мар. 27, 2023 2:18:33 AM org.example.equipment.EquipmentAgent$waitForProposal action
 INFO: DAZHENG LOOKYAMI started working
-мар. 27, 2023 12:47:48 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. got propose to work
-мар. 27, 2023 12:47:48 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. started to work
-мар. 27, 2023 12:47:52 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor123 received order
-мар. 27, 2023 12:47:52 AM org.example.customer.CustomerAgent$WaitForOrder action
+мар. 27, 2023 2:18:33 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. got propose to work
+мар. 27, 2023 2:18:33 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. started to work
+мар. 27, 2023 2:18:37 AM org.example.customer.CustomerAgent$WaitForOrder action
 INFO: Visitor124 received order
-мар. 27, 2023 12:47:57 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. finished work
-мар. 27, 2023 12:47:57 AM org.example.equipment.EquipmentAgent$waitForProposal action
+мар. 27, 2023 2:18:37 AM org.example.customer.CustomerAgent$WaitForOrder action
+INFO: Visitor123 received order
+мар. 27, 2023 2:18:42 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. finished work
+мар. 27, 2023 2:18:42 AM org.example.equipment.EquipmentAgent$waitForProposal action
 INFO: DAZHENG LOOKYAMI finished work
-мар. 27, 2023 12:47:57 AM org.example.process.ProcessAgent$waitForFreeStuff action
-INFO: Process 1 was killed
-мар. 27, 2023 12:47:57 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor123 received order
-мар. 27, 2023 12:47:57 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor124 received order
-мар. 27, 2023 12:47:58 AM org.example.equipment.EquipmentAgent$waitForProposal action
-INFO: DAZHENG LOOKYAMI got proposal to work
-мар. 27, 2023 12:47:58 AM org.example.process.ProcessAgent$waitForFreeStuff action
-INFO: Process 2 found cooker and equipment
-мар. 27, 2023 12:47:58 AM org.example.equipment.EquipmentAgent$waitForProposal action
-INFO: DAZHENG LOOKYAMI got proposal to work
-мар. 27, 2023 12:47:58 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. started to work
-мар. 27, 2023 12:47:58 AM org.example.equipment.EquipmentAgent$waitForProposal action
-INFO: DAZHENG LOOKYAMI started working
-мар. 27, 2023 12:48:02 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor123 received order
-мар. 27, 2023 12:48:02 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor124 received order
-мар. 27, 2023 12:48:07 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. finished work
-мар. 27, 2023 12:48:07 AM org.example.equipment.EquipmentAgent$waitForProposal action
-INFO: DAZHENG LOOKYAMI finished work
-мар. 27, 2023 12:48:07 AM org.example.order.OrderAgent$1 action
-INFO: Order 1 was killed
-мар. 27, 2023 12:48:07 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor123 received order
-мар. 27, 2023 12:48:07 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor123 received order
-мар. 27, 2023 12:48:07 AM org.example.process.ProcessAgent$waitForFreeStuff action
-INFO: Process 2 was killed
-мар. 27, 2023 12:48:07 AM org.example.equipment.EquipmentAgent$waitForProposal action
-INFO: DAZHENG LOOKYAMI got proposal to work
-мар. 27, 2023 12:48:07 AM org.example.process.ProcessAgent$waitForFreeStuff action
-INFO: Process 3 found cooker and equipment
-мар. 27, 2023 12:48:07 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. started to work
-мар. 27, 2023 12:48:07 AM org.example.equipment.EquipmentAgent$waitForProposal action
-INFO: DAZHENG LOOKYAMI started working
-мар. 27, 2023 12:48:07 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor124 received order
-мар. 27, 2023 12:48:12 AM org.example.customer.CustomerAgent$WaitForOrder action
-INFO: Visitor124 received order
-мар. 27, 2023 12:48:16 AM org.example.cooker.CookerAgent$waitForProposal action
-INFO: Sidorov G. S. finished work
-мар. 27, 2023 12:48:16 AM org.example.equipment.EquipmentAgent$waitForProposal action
-INFO: DAZHENG LOOKYAMI finished work
-мар. 27, 2023 12:48:16 AM org.example.order.OrderAgent$1 action
+мар. 27, 2023 2:18:42 AM org.example.order.OrderAgent$1 action
 INFO: Order 2 was killed
-мар. 27, 2023 12:48:16 AM org.example.customer.CustomerAgent$WaitForOrder action
+мар. 27, 2023 2:18:42 AM org.example.customer.CustomerAgent$WaitForOrder action
 INFO: Visitor124 received order
-мар. 27, 2023 12:48:16 AM org.example.customer.CustomerAgent$WaitForOrder action
+мар. 27, 2023 2:18:42 AM org.example.customer.CustomerAgent$WaitForOrder action
 INFO: Visitor124 received order
-мар. 27, 2023 12:48:16 AM org.example.process.ProcessAgent$waitForFreeStuff action
+мар. 27, 2023 2:18:42 AM org.example.process.ProcessAgent$waitForFreeStuff action
+INFO: Process 1 was killed
+мар. 27, 2023 2:18:42 AM org.example.customer.CustomerAgent$WaitForOrder action
+INFO: Visitor123 received order
+мар. 27, 2023 2:18:43 AM org.example.equipment.EquipmentAgent$waitForProposal action
+INFO: DAZHENG LOOKYAMI got proposal to work
+мар. 27, 2023 2:18:43 AM org.example.equipment.EquipmentAgent$waitForProposal action
+INFO: DAZHENG LOOKYAMI got proposal to work
+мар. 27, 2023 2:18:43 AM org.example.process.ProcessAgent$waitForFreeStuff action
+INFO: Process 3 found cooker and equipment
+мар. 27, 2023 2:18:43 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. started to work
+мар. 27, 2023 2:18:43 AM org.example.equipment.EquipmentAgent$waitForProposal action
+INFO: DAZHENG LOOKYAMI started working
+мар. 27, 2023 2:18:47 AM org.example.customer.CustomerAgent$WaitForOrder action
+INFO: Visitor123 received order
+мар. 27, 2023 2:18:52 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. finished work
+мар. 27, 2023 2:18:52 AM org.example.equipment.EquipmentAgent$waitForProposal action
+INFO: DAZHENG LOOKYAMI finished work
+мар. 27, 2023 2:18:52 AM org.example.process.ProcessAgent$waitForFreeStuff action
 INFO: Process 3 was killed
+мар. 27, 2023 2:18:52 AM org.example.equipment.EquipmentAgent$waitForProposal action
+INFO: DAZHENG LOOKYAMI got proposal to work
+мар. 27, 2023 2:18:52 AM org.example.process.ProcessAgent$waitForFreeStuff action
+INFO: Process 2 found cooker and equipment
+мар. 27, 2023 2:18:52 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. started to work
+мар. 27, 2023 2:18:52 AM org.example.equipment.EquipmentAgent$waitForProposal action
+INFO: DAZHENG LOOKYAMI started working
+мар. 27, 2023 2:18:52 AM org.example.customer.CustomerAgent$WaitForOrder action
+INFO: Visitor123 received order
+мар. 27, 2023 2:18:57 AM org.example.customer.CustomerAgent$WaitForOrder action
+INFO: Visitor123 received order
+мар. 27, 2023 2:19:01 AM org.example.cooker.CookerAgent$waitForProposal action
+INFO: Petrov I. V. finished work
+мар. 27, 2023 2:19:01 AM org.example.equipment.EquipmentAgent$waitForProposal action
+INFO: DAZHENG LOOKYAMI finished work
+мар. 27, 2023 2:19:01 AM org.example.order.OrderAgent$1 action
+INFO: Order 1 was killed
+мар. 27, 2023 2:19:01 AM org.example.customer.CustomerAgent$WaitForOrder action
+INFO: Visitor123 received order
+мар. 27, 2023 2:19:01 AM org.example.customer.CustomerAgent$WaitForOrder action
+INFO: Visitor123 received order
+мар. 27, 2023 2:19:01 AM org.example.process.ProcessAgent$waitForFreeStuff action
+INFO: Process 2 was killed
