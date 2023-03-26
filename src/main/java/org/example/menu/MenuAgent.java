@@ -91,7 +91,7 @@ public class MenuAgent extends Agent {
                         Storage storage = new Storage();
 
 
-                        message.put("menu",  storage.getUpdatedMenu());
+                        message.put("menu",  menu);
                         System.out.println(message);
                         aclMessage.setContentObject(message);
                         myAgent.send(aclMessage);

@@ -22,15 +22,19 @@ public class ProcessAgent extends Agent {
 
     private static int processNumbers = 0;
 
+    AID order;
 
     private Long dishCardId;
 
     private Card card;
 
+    private DFAgentDescription dfd;
+    private ServiceDescription sd;
+
     protected void setup() {
-        DFAgentDescription dfd = new DFAgentDescription();
+        dfd = new DFAgentDescription();
         dfd.setName(getAID());
-        ServiceDescription sd = new ServiceDescription();
+        sd = new ServiceDescription();
         sd.setType(AGENT_TYPE);
         sd.setName("Process of cooking");
         dfd.addServices(sd);
@@ -43,6 +47,8 @@ public class ProcessAgent extends Agent {
         System.out.println("Process started");
         Object[] args = getArguments();
         dishCardId = (Long) args[0];
+        order = (AID) args[1];
+
         card = MenuAgent.cards.get(dishCardId);
         System.out.println(dishCardId);
 
@@ -57,6 +63,7 @@ public class ProcessAgent extends Agent {
 
         AID equipment;
         AID cook;
+
 
         @Override
         public void action() {
@@ -105,9 +112,16 @@ public class ProcessAgent extends Agent {
                         }
                     }
                     if (msg.getPerformative() == ACLMessage.INFORM) {
-                        System.out.println("Process is ready");
+                        System.out.println(getAID().getLocalName() + " is ready!");
                         sendDoneMessage(equipment);
+                        sendConfirmMessage(order, card.getCard_time());
 
+                        try {
+                            DFService.deregister(myAgent, dfd);
+                        } catch (FIPAException fe) {
+                            fe.printStackTrace();
+                        }
+                        doDelete();
                     }
                 } catch (UnreadableException e) {
                     throw new RuntimeException(e);
@@ -119,6 +133,13 @@ public class ProcessAgent extends Agent {
         public boolean done() {
             return false;
         }
+    }
+
+    @Override
+    protected void takeDown() {
+        System.out.println(getAID().getLocalName() + " is shutting down");
+
+        super.takeDown();
     }
 
     private void sendProposeMessage(AID aid) {
@@ -174,6 +195,20 @@ public class ProcessAgent extends Agent {
         }
     }
 
+
+    private void sendConfirmMessage(AID aid, double time) {
+        ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
+        msg.addReceiver(aid);
+        try {
+            JSONObject message = new JSONObject();
+            message.put("confirm", "finished");
+            message.put("time", time);
+            msg.setContentObject(message);
+            send(msg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static int getProcessNumbers() {
         return ++processNumbers;
