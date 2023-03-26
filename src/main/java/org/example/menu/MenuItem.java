@@ -23,5 +23,8 @@ public class MenuItem implements Serializable {
         this.menu_dish_active = (Boolean) stuff.get("menu_dish_active");
     }
 
+    public Long getMenu_dish_card() {
+        return menu_dish_card;
+    }
 }
 

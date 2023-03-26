@@ -12,6 +12,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import org.example.manager.ManagerAgent;
+import org.example.menu.MenuItem;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -30,6 +31,7 @@ public class CustomerAgent extends Agent {
     List<CusOrdDish> vis_ord_dishes;
 
     public static final String AGENT_TYPE = "customer";
+    HashMap<Long, MenuItem> menu;
 
 
     private AID managerId;
@@ -124,6 +126,8 @@ public class CustomerAgent extends Agent {
 
                     try {
                         JSONObject message = (JSONObject) msg.getContentObject();
+                        menu = (HashMap<Long, MenuItem>) message.get("menu");
+
                         System.out.println(message);
                         receivedMenu = true;
 
@@ -153,20 +157,6 @@ public class CustomerAgent extends Agent {
     }
 
 
-    private class FindManager extends Behaviour {
-
-        @Override
-        public void action() {
-
-        }
-
-        @Override
-        public boolean done() {
-            return false;
-        }
-    }
-
-
     private class MakeOrder extends OneShotBehaviour {
         @Override
         public void action() {
@@ -176,9 +166,7 @@ public class CustomerAgent extends Agent {
                 JSONObject message = new JSONObject();
                 message.put("request", "order");
                 JSONArray jsonArray = new JSONArray();
-                jsonArray.add(new JSONObject() {{
-                    put("1", "2");
-                }});
+                jsonArray.add(28L);
                 message.put("order", jsonArray);
                 msg.setContentObject(message);
                 myAgent.send(msg);
@@ -216,5 +204,6 @@ public class CustomerAgent extends Agent {
             return receivedOrder;
         }
     }
-}
 
+
+}

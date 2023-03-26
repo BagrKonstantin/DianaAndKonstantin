@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class MenuAgent extends Agent {
-    Map<Long, MenuItem> menu;
-    Map<Long, Card> cards;
+    public static Map<Long, MenuItem> menu;
+    public static Map<Long, Card> cards;
     public MenuAgent() throws IOException, ParseException {
         menu = new HashMap<>();
         cards = new HashMap<>();

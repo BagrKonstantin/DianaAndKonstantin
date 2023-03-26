@@ -6,6 +6,7 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.StaleProxyException;
 import org.example.AgentGenerator;
+import org.example.menu.MenuAgent;
 import org.example.process.ProcessAgent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -46,7 +47,7 @@ public class OrderAgent extends Agent {
         for (var item : order) {
             int processNumber = ProcessAgent.getProcessNumbers();
             try {
-                AgentGenerator.addAgent("Process " + processNumber, ProcessAgent.class.getName(), new Object[]{item});
+                AgentGenerator.addAgent("Process " + processNumber, ProcessAgent.class.getName(), new Object[]{MenuAgent.menu.get(item).getMenu_dish_card()});
             } catch (StaleProxyException e) {
                 throw new RuntimeException(e);
             }
