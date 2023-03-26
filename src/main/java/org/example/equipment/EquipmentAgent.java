@@ -23,6 +23,9 @@ public class EquipmentAgent extends Agent {
 
     Long equipmentTypeId;
 
+    String equip_name;
+    Boolean equip_active;
+
     public static final String AGENT_TYPE = "equipment";
 
     protected void notifyAllProcesses() throws IOException {
@@ -61,10 +64,14 @@ public class EquipmentAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
+
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
 
         Object[] args = getArguments();
-        equipmentTypeId = (Long) args[0];
+        this.equipmentTypeId = (Long) ((JSONObject) args[0]).get("equip_type");
+        //equipmentTypeId = (Long) args[0];
+        this.equip_name = (String) ((JSONObject) args[0]).get("equip_name");
+        this.equip_active = (Boolean) ((JSONObject) args[0]).get("equip_active");
         addBehaviour(new TickerBehaviour(this, 1000) {
 
             @Override

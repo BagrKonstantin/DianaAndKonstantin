@@ -29,7 +29,6 @@ public class Main {
         System.out.println("Hello world!");
 
 //        Controller controller = new Controller();
-//          Storage a = new Storage();
 
 
 
@@ -94,18 +93,38 @@ public class Main {
                 AgentGenerator.addAgent((String) ((JSONObject) item).get("vis_name"), CustomerAgent.class.getName(), new  Object[] {item});
             }
         }
+
+        File file1 = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/equipment.txt");
+
+        JSONObject j = (JSONObject) new JSONParser().parse(new FileReader(file1.getPath()));
+
+        for (Object item : (JSONArray) j.get("equipment")) {
+            JSONObject productObject = (JSONObject) item;
+            if (productObject.containsKey("equip_type")) {
+                AgentGenerator.addAgent((String) ((JSONObject) item).get("equip_name"), EquipmentAgent.class.getName(), new  Object[] {item});
+            }
+        }
         // AgentGenerator.addAgent("Cumstomer", CustomerAgent.class.getName());
         // AgentGenerator.addAgent("Cumstomer2", CustomerAgent.class.getName());
         //AgentGenerator.addAgent("Cumstomer", CustomerAgent.class.getName());
         // AgentGenerator.addAgent("Cumstomer2", CustomerAgent.class.getName());
 
+        File file2 = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/cookers.txt");
 
+        JSONObject k = (JSONObject) new JSONParser().parse(new FileReader(file2.getPath()));
 
-        AgentGenerator.addAgent("Cook1", CookerAgent.class.getName());
-        AgentGenerator.addAgent("Cook2", CookerAgent.class.getName());
+        for (Object item : (JSONArray) k.get("cookers")) {
+            JSONObject productObject = (JSONObject) item;
+            if (productObject.containsKey("cook_id")) {
+                AgentGenerator.addAgent((String) ((JSONObject) item).get("cook_name"), CookerAgent.class.getName(), new  Object[] {item});
+            }
+        }
 
-        AgentGenerator.addAgent("Equipment", EquipmentAgent.class.getName(), new Object[] {2L});
-        AgentGenerator.addAgent("Equipment2", EquipmentAgent.class.getName(), new Object[] {25L});
+        // AgentGenerator.addAgent("Cook1", CookerAgent.class.getName());
+        // AgentGenerator.addAgent("Cook2", CookerAgent.class.getName());
+
+        // AgentGenerator.addAgent("Equipment", EquipmentAgent.class.getName(), new Object[] {2L});
+        // AgentGenerator.addAgent("Equipment2", EquipmentAgent.class.getName(), new Object[] {25L});
 
 
     }
