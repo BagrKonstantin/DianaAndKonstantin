@@ -12,6 +12,10 @@ public class Operations {
     Long oper_async_point;
     List<OperProds> oper_products;
 
+    public List<OperProds> getOper_products() {
+        return oper_products;
+    }
+
     public Operations(JSONObject stuff) {
         oper_products = new ArrayList<>();
         this.oper_time = Double.valueOf(stuff.get("oper_time").toString());

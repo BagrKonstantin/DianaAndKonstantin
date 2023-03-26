@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.example.menu.MenuAgent;
 import org.json.simple.JSONArray;
 
 import org.json.simple.JSONObject;
@@ -33,6 +34,26 @@ public class Storage {
                 long id = (Long) ((JSONObject) item).get("prod_item_id");
                 storage.put(id, new Product((JSONObject) item));
                 System.out.println("get");
+            }
+        }
+
+    }
+
+    public void getUpdatedMenu() {
+        for (var item : MenuAgent.menu.values()) {
+            var boba = MenuAgent.cards.get(item.getMenu_dish_card());
+            for(var i : boba.getOper().values()) {
+                for(var m : i.getOper_products()) {
+                    boolean flag = true;
+                    for (var p : storage.keySet()) {
+                        if (!m.getProd_type().equals(p)) {
+                            flag = false;
+                        }
+                    }
+                    if (flag == true) {
+                        MenuAgent.getNewmenu().put(item.getId(), item);
+                    }
+                }
             }
         }
     }

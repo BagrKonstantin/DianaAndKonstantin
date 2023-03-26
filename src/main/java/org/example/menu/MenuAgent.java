@@ -26,7 +26,14 @@ import java.util.Map;
 public class MenuAgent extends Agent {
     public static Map<Long, MenuItem> menu;
     public static Map<Long, Card> cards;
+    public static Map<Long, MenuItem> newmenu;
+
+    public static Map<Long, MenuItem> getNewmenu() {
+        return newmenu;
+    }
+
     public MenuAgent() throws IOException, ParseException {
+        newmenu = new HashMap<>();
         menu = new HashMap<>();
         cards = new HashMap<>();
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/menu_dishes.txt");
@@ -81,15 +88,10 @@ public class MenuAgent extends Agent {
                 if (msg != null) {
                     try {
                         JSONObject json = (JSONObject) msg.getContentObject();
-
-
                         System.out.println("Menu recieved: " + json);
-
                         ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
                         aclMessage.addReceiver(msg.getSender());
                         JSONObject message = new JSONObject();
-                        message.put("menu", menu);
-
                         aclMessage.setContentObject(message);
                         myAgent.send(aclMessage);
                     } catch (UnreadableException e) {
