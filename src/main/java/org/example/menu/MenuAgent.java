@@ -76,7 +76,7 @@ public class MenuAgent extends Agent {
                         ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
                         aclMessage.addReceiver(msg.getSender());
                         JSONObject message = new JSONObject();
-                        message.put("menu", new HashSet<>());
+                        message.put("menu", menu);
 
                         aclMessage.setContentObject(message);
                         myAgent.send(aclMessage);

@@ -18,6 +18,9 @@ public class OrderAgent extends Agent {
     AID customerAID;
     List order;
 
+    public static final String AGENT_TYPE = "order";
+
+
     private static int orderNumbers = 0;
 
     private int orderNumber;
