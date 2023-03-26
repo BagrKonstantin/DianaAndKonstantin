@@ -77,20 +77,20 @@ public class ProcessAgent extends Agent {
                     if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
                         if (message.get("propose").equals(CookerAgent.AGENT_TYPE)) {
                             if (hasCooker) {
-                                //TODO deny
+                                sendProposeDenyMessage(msg.getSender());
                             } else {
                                 hasCooker = true;
                                 System.out.println("Cooker was found");
-                                // TODO confirm
+                                sendProposeConfirmMessage(msg.getSender());
                             }
                         }
                         if (message.get("propose").equals(EquipmentAgent.AGENT_TYPE)) {
                             if (hasEquipment) {
-                                //TODO deny
+                                sendProposeDenyMessage(msg.getSender());
                             } else {
                                 hasEquipment = true;
                                 System.out.println("Equipment was found");
-                                // TODO confirm
+                                sendProposeConfirmMessage(msg.getSender());
                             }
                         }
                     }
@@ -112,6 +112,32 @@ public class ProcessAgent extends Agent {
         try {
             JSONObject message = new JSONObject();
             message.put("propose", "work");
+            msg.setContentObject(message);
+            send(msg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendProposeConfirmMessage(AID aid) {
+        ACLMessage msg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+        msg.addReceiver(aid);
+        try {
+            JSONObject message = new JSONObject();
+            message.put("propose", "confirm");
+            msg.setContentObject(message);
+            send(msg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendProposeDenyMessage(AID aid) {
+        ACLMessage msg = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
+        msg.addReceiver(aid);
+        try {
+            JSONObject message = new JSONObject();
+            message.put("propose", "rejected");
             msg.setContentObject(message);
             send(msg);
         } catch (Exception e) {
