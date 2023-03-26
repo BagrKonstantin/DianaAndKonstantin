@@ -82,6 +82,7 @@ public class Main {
 
         AgentGenerator agentGenerator = new AgentGenerator();
         AgentGenerator.addAgent("Menu", MenuAgent.class.getName());
+        AgentGenerator.addAgent("Storage", Storage.class.getName());
         AgentGenerator.addAgent("Michael Scott", ManagerAgent.class.getName());
 
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/visitors_orders.txt");

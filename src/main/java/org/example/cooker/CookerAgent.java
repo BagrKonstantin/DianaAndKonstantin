@@ -99,7 +99,6 @@ public class CookerAgent extends Agent {
                     if (msg.getPerformative() == ACLMessage.PROPOSE) {
                         if (message.get("propose").equals("work")) {
                             if (!isBusy) {
-                                isBusy = true;
                                 sendProposeConfirmMessage(msg.getSender());
                             }
                         }
@@ -110,6 +109,8 @@ public class CookerAgent extends Agent {
 //                        }
                     }
                     if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+                        isBusy = true;
+
                         card = MenuAgent.cards.get(message.get("card"));
                         System.out.println(card);
                         System.out.println("Cooker working");

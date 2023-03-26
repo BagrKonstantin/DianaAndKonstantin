@@ -5,6 +5,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import org.example.menu.MenuAgent;
 import org.example.menu.MenuItem;
 import org.json.simple.JSONArray;
@@ -14,8 +22,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
 
-public class Storage {
+public class Storage extends Agent {
     public Map<Long, Product> storage;
+
+    public static final String AGENT_TYPE = "storage";
 
     public Storage() throws IOException, ParseException {
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/products.txt");
@@ -34,6 +44,56 @@ public class Storage {
             }
         }
 
+    }
+
+    @Override
+    protected void setup() {
+        DFAgentDescription dfd = new DFAgentDescription();
+        dfd.setName(getAID());
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType(AGENT_TYPE);
+        sd.setName("Have food");
+        dfd.addServices(sd);
+        try {
+            DFService.register(this, dfd);
+        } catch (FIPAException fe) {
+            fe.printStackTrace();
+        }
+
+        System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
+
+        addBehaviour(new Behaviour() {
+            @Override
+            public void action() {
+                ACLMessage msg = myAgent.receive();
+                if (msg != null) {
+                    try {
+                        JSONObject json = (JSONObject) msg.getContentObject();
+                        if (msg.getPerformative() == ACLMessage.REQUEST) {
+                            ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
+                            aclMessage.addReceiver(msg.getSender());
+                            JSONObject message = new JSONObject();
+
+                            message.put("menu",  getUpdatedMenu());
+                            System.out.println(message);
+                            aclMessage.setContentObject(message);
+                            myAgent.send(aclMessage);
+                        }
+                    } catch (UnreadableException e) {
+                        System.out.println(e);
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        System.out.println(e);
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public boolean done() {
+                return false;
+            }
+        });
     }
 
     public Map<Long, MenuItem> getUpdatedMenu() {

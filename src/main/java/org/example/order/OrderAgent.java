@@ -52,7 +52,9 @@ public class OrderAgent extends Agent {
         order = (JSONArray) args[1];
         orderNumber = (Integer) args[2];
         status = statuses.CREATED;
-
+        if (order.isEmpty()) {
+            doDelete();
+        }
         for (var item : order) {
             int processNumber = ProcessAgent.getProcessNumbers();
             try {

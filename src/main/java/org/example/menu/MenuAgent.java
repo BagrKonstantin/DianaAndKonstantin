@@ -1,5 +1,6 @@
 package org.example.menu;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
@@ -19,13 +20,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 public class MenuAgent extends Agent {
     public static Map<Long, MenuItem> menu;
     public static Map<Long, Card> cards;
+
+    AID storage;
 
 
     public MenuAgent() throws IOException, ParseException {
@@ -56,7 +57,26 @@ public class MenuAgent extends Agent {
         }
     }
 
+    public void findStorage() {
+        //menuAgent = this.getArguments()[0];
+        DFAgentDescription template = new DFAgentDescription();
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType(Storage.AGENT_TYPE);
+        template.addServices(sd);
+        DFAgentDescription[] result;
+        try {
+            result = DFService.search(this, template);
+        } catch (FIPAException e) {
+            throw new RuntimeException(e);
+        }
+        storage = result[0].getName();
+
+
+    }
+
     public static final String AGENT_TYPE = "menu";
+
+    Queue<AID> requests;
 
     protected void setup() {
 
@@ -71,6 +91,8 @@ public class MenuAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
+        requests = new LinkedList<>();
+        findStorage();
 
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
 
@@ -82,26 +104,29 @@ public class MenuAgent extends Agent {
                     try {
                         JSONObject json = (JSONObject) msg.getContentObject();
                         System.out.println("Menu recieved: " + json);
-                        ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
-                        aclMessage.addReceiver(msg.getSender());
-                        JSONObject message = new JSONObject();
+
+                        if (msg.getPerformative() == ACLMessage.REQUEST) {
+                            requests.add(msg.getSender());
+                            ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
+                            aclMessage.addReceiver(storage);
+                            send(aclMessage);
+                        }
 
 
-                        // message.put("menu", new_menu);
-                        Storage storage = new Storage();
+                        if (msg.getPerformative() == ACLMessage.CONFIRM) {
+                            ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
+                            aclMessage.addReceiver(requests.poll());
+                            System.out.println(json);
+                            aclMessage.setContentObject(json);
+                            myAgent.send(aclMessage);
+                        }
 
 
-                        message.put("menu",  menu);
-                        System.out.println(message);
-                        aclMessage.setContentObject(message);
-                        myAgent.send(aclMessage);
                     } catch (UnreadableException e) {
                         System.out.println(e);
                         throw new RuntimeException(e);
                     } catch (IOException e) {
                         System.out.println(e);
-                        throw new RuntimeException(e);
-                    } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
                 }
