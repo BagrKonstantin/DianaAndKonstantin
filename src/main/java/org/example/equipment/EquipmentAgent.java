@@ -1,28 +1,25 @@
-package org.example.cooker;
+package org.example.equipment;
 
-import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import org.example.manager.ManagerAgent;
+import org.example.cooker.CookerAgent;
 import org.example.order.OrderAgent;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class CookerAgent extends Agent {
+public class EquipmentAgent extends Agent {
 
     boolean isBusy;
 
-    public static final String AGENT_TYPE = "cooker";
+    Long equipmentTypeId;
 
+    public static final String AGENT_TYPE = "equipment";
 
     protected void notifyAllProcesses() throws IOException {
 
@@ -42,6 +39,7 @@ public class CookerAgent extends Agent {
         }
         JSONObject message = new JSONObject();
         message.put("propose", AGENT_TYPE);
+        message.put(AGENT_TYPE, equipmentTypeId);
         msg.setContentObject(message);
         send(msg);
     }
@@ -52,7 +50,7 @@ public class CookerAgent extends Agent {
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setType(AGENT_TYPE);
-        sd.setName("Cooker who works in restaurant");
+        sd.setName("Equipment in restaurant");
         dfd.addServices(sd);
         try {
             DFService.register(this, dfd);
@@ -65,11 +63,14 @@ public class CookerAgent extends Agent {
             @Override
             protected void onTick() {
                 try {
-                    ((CookerAgent)myAgent).notifyAllProcesses();
+                    ((EquipmentAgent)myAgent).notifyAllProcesses();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         });
     }
+
+
+
 }
