@@ -70,7 +70,6 @@ public class CustomerAgent extends Agent {
             vis_ord_dishes = new ArrayList<>();
             for (Object item : (JSONArray) ((JSONObject) args[0]).get("vis_ord_dishes")) {
                 vis_ord_dishes.add(new CusOrdDish((JSONObject)item));
-                System.out.println("Hui");
             }
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         findManager();
@@ -167,8 +166,13 @@ public class CustomerAgent extends Agent {
                 message.put("request", "order");
                 JSONArray jsonArray = new JSONArray();
                 for (var item: vis_ord_dishes) {
-                    jsonArray.add(item.getOrd_dish_id());
+                    for (var key : menu.values()) {
+                        if (key.getId().equals(item.getOrd_dish_id())) {
+                            jsonArray.add(item.getOrd_dish_id());
+                        }
+                    }
                 }
+                System.out.println(jsonArray);
                 message.put("order", jsonArray);
                 msg.setContentObject(message);
                 myAgent.send(msg);

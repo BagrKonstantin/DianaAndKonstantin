@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class MenuItem implements Serializable {
-    Long menu_dish_id;
+     Long menu_dish_id;
     Long menu_dish_card;
     Long menu_dish_price;
     Boolean menu_dish_active;
@@ -21,6 +21,9 @@ public class MenuItem implements Serializable {
         this.menu_dish_card = (Long) stuff.get("menu_dish_card");
         this.menu_dish_price = (Long) stuff.get("menu_dish_price");
         this.menu_dish_active = (Boolean) stuff.get("menu_dish_active");
+    }
+    public Long getId() {
+        return menu_dish_id;
     }
 
     public Long getMenu_dish_card() {
