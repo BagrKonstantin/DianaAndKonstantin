@@ -70,7 +70,6 @@ public class CustomerAgent extends Agent {
             vis_ord_dishes = new ArrayList<>();
             for (Object item : (JSONArray) ((JSONObject) args[0]).get("vis_ord_dishes")) {
                 vis_ord_dishes.add(new CusOrdDish((JSONObject)item));
-                System.out.println("Hui");
             }
         System.out.println("Hello from " + getAID().getLocalName() + " agent, now it's ready to go!");
         findManager();

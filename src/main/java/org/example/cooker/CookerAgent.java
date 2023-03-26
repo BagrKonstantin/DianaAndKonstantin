@@ -108,10 +108,10 @@ public class CookerAgent extends Agent {
 //                            }
 //                        }
                     }
-                    if (msg.getPerformative() == ACLMessage.CONFIRM) {
-
+                    if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+                        System.out.println("Working");
                     }
-                    if (msg.getPerformative() == ACLMessage.DISCONFIRM) {
+                    if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL) {
                         isBusy = false;
                     }
                 } catch (UnreadableException e) {
