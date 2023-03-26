@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.example.menu.MenuAgent;
+import org.example.menu.MenuItem;
 import org.json.simple.JSONArray;
 
 import org.json.simple.JSONObject;
@@ -39,7 +40,8 @@ public class Storage {
 
     }
 
-    public void getUpdatedMenu() {
+    public Map<Long, MenuItem> getUpdatedMenu() {
+        Map<Long, MenuItem> newMenu = new HashMap<>();
         for (var item : MenuAgent.menu.values()) {
             var boba = MenuAgent.cards.get(item.getMenu_dish_card());
             for(var i : boba.getOper().values()) {
@@ -51,10 +53,11 @@ public class Storage {
                         }
                     }
                     if (flag == true) {
-                        MenuAgent.getNewmenu().put(item.getId(), item);
+                        newMenu.put(item.getId(), item);
                     }
                 }
             }
         }
+        return newMenu;
     }
 }
