@@ -8,26 +8,45 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+import org.example.storage.Product;
+import org.example.storage.Storage;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class MenuAgent extends Agent {
+    Map<Long, MenuItem> menu;
+    public MenuAgent() throws IOException, ParseException {
+        menu = new HashMap();
+        File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/menu_dishes.txt");
 
-    HashSet<MenuItem> menu;
+        System.out.println(file.getPath());
+        JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
+
+        for (Object item : (JSONArray) o.get("menu_dishes")) {
+            JSONObject productObject = (JSONObject) item;
+            if (productObject.containsKey("menu_dish_id")) {
+                Long id = (Long) ((JSONObject) item).get("menu_dish_id");
+                menu.put(id, new MenuItem((JSONObject) item));
+                System.out.println("get");
+            }
+        }
+    }
 
     public static final String AGENT_TYPE = "menu";
 
     protected void setup() {
 
-        menu = new HashSet<MenuItem>();
-        menu.add(new MenuItem(0, 0, true));
-        menu.add(new MenuItem(1, 2, true));
-        menu.add(new MenuItem(2, 1, true));
-        menu.add(new MenuItem(3, 3, true));
 
-//        this.getContainerController().getName();
 
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 
@@ -16,24 +17,23 @@ import org.w3c.dom.ls.LSOutput;
 
 
 public class Storage {
+    public Map<Long, Product> storage;
 
-
-     HashMap<Integer, Product> storage;
     public Storage() throws IOException, ParseException {
         File file = new File(Storage.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "input/products.txt");
 
-
-
         System.out.println(file.getPath());
         JSONObject o = (JSONObject) new JSONParser().parse(new FileReader(file.getPath()));
-        System.out.println(o);
 
-         for (Object item : (JSONArray) o.get("products")) {
-             int id = (int) ((JSONObject) item).get("prod_item_id");
-             storage.put(id, new Product((JSONObject)item));
-             System.out.println("get");
-         }
+        storage = new HashMap<>();
+
+        for (Object item : (JSONArray) o.get("products")) {
+            JSONObject productObject = (JSONObject) item;
+            if (productObject.containsKey("prod_item_id")) {
+                long id = (Long) ((JSONObject) item).get("prod_item_id");
+                storage.put(id, new Product((JSONObject) item));
+                System.out.println("get");
+            }
+        }
     }
-
-
 }
